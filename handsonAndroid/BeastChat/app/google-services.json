@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "790555762889",
+    "firebase_url": "https://beastchat-7e7a7.firebaseio.com",
+    "project_id": "beastchat-7e7a7",
+    "storage_bucket": "beastchat-7e7a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790555762889:android:d39f9172a798c4dd",
+        "android_client_info": {
+          "package_name": "com.example.kevin_sct.beastchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790555762889-jcd3tdvd0rj0d43hms8mul4pef88r9sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHcX2zSL4SWrfu2vjwIWdSMoi2wLR24F4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

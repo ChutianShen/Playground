@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/list_friend_request_userPicture"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="30dip"
+        app:riv_border_width="2dip"
+        app:riv_border_color="#333333"
+        app:riv_oval="true"
+        android:layout_weight="0.07"
+        />
+
+    <TextView
+        android:id="@+id/list_friend_request_userName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Carlos Valentin"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:layout_weight="0.20"
+        />
+
+    <ImageView
+        android:id="@+id/list_friend_request_acceptRequest"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@drawable/friend_request_approve"
+        android:src="@mipmap/ic_approve"
+        android:layout_gravity="center"
+
+        android:layout_weight="0.05"
+
+        />
+    <ImageView
+        android:id="@+id/list_friend_request_rejectRequest"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@drawable/friend_request_decline"
+        android:src="@mipmap/ic_cancel_request"
+        android:layout_gravity="center"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_weight="0.05"
+
+        />
+
+</LinearLayout>

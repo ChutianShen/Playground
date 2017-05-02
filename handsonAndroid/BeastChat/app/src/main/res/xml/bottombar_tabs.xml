@@ -1,0 +1,23 @@
+<tabs>
+
+
+    <tab
+        id = "@+id/tab_messages"
+        icon = "@drawable/ic_messages"
+        title = "Inbox"
+        />
+
+    <tab
+        id = "@+id/tab_friends"
+        icon = "@drawable/ic_friends"
+        title = "Friends"
+        />
+
+    <tab
+        id = "@+id/tab_profile"
+        icon = "@drawable/ic_profile"
+        title = "Profile"
+        />
+
+
+</tabs>

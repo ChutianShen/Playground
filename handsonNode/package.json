@@ -1,0 +1,17 @@
+{
+  "name": "node_android_udemy",
+  "version": "1.0.0",
+  "description": "server.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chutian",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "fcm-push": "^1.1.2",
+    "firebase-admin": "^4.2.1",
+    "socket.io": "^1.7.3"
+  }
+}
