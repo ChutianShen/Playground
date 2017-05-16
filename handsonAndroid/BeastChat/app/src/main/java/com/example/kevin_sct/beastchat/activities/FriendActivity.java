@@ -13,4 +13,5 @@ public class FriendActivity extends BaseFragmentActivity {
     Fragment createFragment(){
         return FriendFragment.newInstance();
     }
+
 }

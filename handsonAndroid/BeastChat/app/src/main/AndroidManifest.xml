@@ -39,6 +39,10 @@
         <activity android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activities.GameActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.ProfileActivity"/>
+
         <activity android:name=".activities.MessageActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.InboxActivity"/>

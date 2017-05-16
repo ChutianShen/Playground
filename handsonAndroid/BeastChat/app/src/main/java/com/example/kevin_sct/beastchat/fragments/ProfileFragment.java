@@ -20,6 +20,7 @@ import com.example.kevin_sct.beastchat.R;
 import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.Utils.MarshMellowPermisson;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
+import com.example.kevin_sct.beastchat.activities.GameActivity;
 import com.example.kevin_sct.beastchat.services.LiveAccountServices;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,6 +72,11 @@ public class ProfileFragment extends BaseFragment {
 
     @BindView(R.id.fragment_profile_signOut)
     Button mSignOutButton;
+
+    @BindView(R.id.enterConnect3)
+    Button mEnterConnect3;
+
+    //FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
 
     public static ProfileFragment newInstance(){
         return new ProfileFragment();
@@ -156,6 +162,20 @@ public class ProfileFragment extends BaseFragment {
             startActivityForResult(Intent.createChooser(intent,"Choose Image With"),
                     REQUEST_CODE_PICTURE);
         }
+    }
+
+    @OnClick(R.id.enterConnect3)
+    public void setmEnterConnect3(){
+
+        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+
+        startActivity(new Intent(getActivity(), GameActivity.class));
+        //fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.container_all);
+        /*
+        mFragmentManager.beginTransaction().replace(R.id.profile_fragment_id, new Connect3Fragment());
+        mFragmentManager.beginTransaction().addToBackStack(null);
+        mFragmentManager.beginTransaction().commit();
+        */
 
     }
 
