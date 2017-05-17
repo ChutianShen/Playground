@@ -113,5 +113,15 @@
         android:layout_toStartOf="@+id/fragment_profile_userPicture"
         android:text="Connect3" />
 
+    <Button
+        android:id="@+id/goBang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/enterConnect3"
+        android:layout_alignBottom="@+id/enterConnect3"
+        android:layout_toEndOf="@+id/fragment_profile_userPicture"
+        android:layout_toRightOf="@+id/fragment_profile_userPicture"
+        android:text="goBang" />
+
 
 </RelativeLayout>

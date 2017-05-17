@@ -21,6 +21,7 @@ import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.Utils.MarshMellowPermisson;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
 import com.example.kevin_sct.beastchat.activities.GameActivity;
+import com.example.kevin_sct.beastchat.aty.InitAty;
 import com.example.kevin_sct.beastchat.services.LiveAccountServices;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,6 +76,9 @@ public class ProfileFragment extends BaseFragment {
 
     @BindView(R.id.enterConnect3)
     Button mEnterConnect3;
+
+    @BindView(R.id.goBang)
+    Button mgoBang;
 
     //FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
 
@@ -162,6 +166,12 @@ public class ProfileFragment extends BaseFragment {
             startActivityForResult(Intent.createChooser(intent,"Choose Image With"),
                     REQUEST_CODE_PICTURE);
         }
+    }
+
+    @OnClick(R.id.goBang)
+    public void enterGoBnag(){
+        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(getActivity(), InitAty.class));
     }
 
     @OnClick(R.id.enterConnect3)
