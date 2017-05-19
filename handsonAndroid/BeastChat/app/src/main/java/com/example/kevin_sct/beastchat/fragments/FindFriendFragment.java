@@ -48,7 +48,7 @@ import rx.subjects.PublishSubject;
  * Created by kevin_sct on 4/28/17.
  */
 
-public class FindFriendFragment extends BaseFragment implements FindFriendsAdapter.UserListener {
+public class FindFriendFragment extends BaseFragment  {
 
     @BindView(R.id.fragment_find_friends_searchBar)
     EditText mSearchBarEt;
@@ -70,6 +70,9 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
         return new FindFriendFragment();
     }
 
+    private FindFriendsAdapter.UserListener mListener;
+    private FindFriendsAdapter.GameInviteListener mGamerInviteListener;
+
     private String mUserEmailString;
     private FindFriendsAdapter mAdapter;
     private LiveFriendServices mLiveFriendServices;
@@ -78,15 +81,22 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
     private ValueEventListener mGetAllUserListener;
 
     private DatabaseReference mGetAllFriendRequestsSentReference;
-    private ValueEventListener mGetAllFriendRequestsListener;
+    private ValueEventListener mGetAllFriendRequestsSentListener;
+
+    private DatabaseReference mGetAllGameRequestsSentReference;
+    private ValueEventListener mGetAllGameRequestsSentListener;
 
     private DatabaseReference mGetAllFriendRequestReceivedReference;
     private ValueEventListener getmGetAllFriendRequestsReceivedListener;
+
+    private DatabaseReference mGetAllGameRequestsReceivedReference;
+    private ValueEventListener getmGetAllGameRequestsReceivedListener;
 
     private DatabaseReference mGetAllCurrentUsersFriendsReference;
     private ValueEventListener mGetAllCurrentUsersFriendsListener;
 
     public HashMap<String, User> mFriendRequestsSentMap;
+    public HashMap<String, User> mGameRequestsSentMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +114,7 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
         mUserEmailString = mSharedPreferences.getString(CONSTANT.USER_EMAIL, "");
         mLiveFriendServices = LiveFriendServices.getInstance();
         mFriendRequestsSentMap = new HashMap<>();
+        mGameRequestsSentMap = new HashMap<>();
     }
 
     @Nullable
@@ -111,28 +122,86 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends, container, false);
         mUnbiner = ButterKnife.bind(this, rootView);
-        mAllUsers = new ArrayList<>();
-        mAdapter = new FindFriendsAdapter((BaseFragmentActivity) getActivity(), this);
-
-        mGetAllUserListener = getAllUsers(mAdapter, mUserEmailString);
-        mGetAllUserReference = FirebaseDatabase.getInstance().getReference().child(CONSTANT.FIRE_BASE_PATH_USERS);
-        mGetAllUserReference.addValueEventListener(mGetAllUserListener);
 
         mGetAllFriendRequestsSentReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_FRIEND_REQUEST_SENT)
                 .child(CONSTANT.encodeEmail(mUserEmailString));
 
-        mGetAllFriendRequestsListener = mLiveFriendServices.getFriendRequestsSent(mAdapter, this);
+        mGetAllGameRequestsSentReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_SENT)
+                .child(CONSTANT.encodeEmail(mUserEmailString));
+
+        mAllUsers = new ArrayList<>();
+        mListener = new FindFriendsAdapter.UserListener() {
+            @Override
+            public void OnUserClicked(User user) {
+                Toast.makeText(getActivity(), "Friend Click", Toast.LENGTH_SHORT).show();
+
+                if (CONSTANT.isIncludedInMap(mFriendRequestsSentMap,user)){
+                    mGetAllFriendRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    Toast.makeText(getActivity(), "Friend Request not empty", Toast.LENGTH_SHORT).show();
+                    mCompositeSubscription.add(mLiveFriendServices.addOrRemoveFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+                } else{
+                    mGetAllFriendRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .setValue(user);
+                    Toast.makeText(getActivity(), "Friend Request IS empty", Toast.LENGTH_SHORT).show();
+                    mCompositeSubscription.add(mLiveFriendServices.addOrRemoveFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+                }
+            }
+        };
+        mGamerInviteListener = new FindFriendsAdapter.GameInviteListener() {
+            @Override
+            public void GameInviteClicked(User user) {
+                Toast.makeText(getActivity(), "Game Click", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
+
+                if(mGameRequestsSentMap == null || mGameRequestsSentMap.isEmpty()){
+                    Toast.makeText(getActivity(), "GameRequestSent is null or empty", Toast.LENGTH_SHORT).show();
+                }
+
+
+                if (CONSTANT.isIncludedInMap(mGameRequestsSentMap,user)){
+                    mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    Toast.makeText(getActivity(), "Game Request not empty", Toast.LENGTH_SHORT).show();
+                    mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+                } else{
+                    mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .setValue(user);
+                    Toast.makeText(getActivity(), "Game Request is empty", Toast.LENGTH_SHORT).show();
+                    mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+                }
+            }
+        };
+        mAdapter = new FindFriendsAdapter((BaseFragmentActivity) getActivity(), mListener, mGamerInviteListener);
+
+
+        mGetAllUserListener = getAllUsers(mAdapter, mUserEmailString);
+        mGetAllUserReference = FirebaseDatabase.getInstance().getReference().child(CONSTANT.FIRE_BASE_PATH_USERS);
+        mGetAllUserReference.addValueEventListener(mGetAllUserListener);
+
+
+
+        mGetAllFriendRequestsSentListener = mLiveFriendServices.getFriendRequestsSent(mAdapter, this);
+        mGetAllGameRequestsSentListener = mLiveFriendServices.getGameRequestsSent(mAdapter, this, getActivity());
 
         getmGetAllFriendRequestsReceivedListener = mLiveFriendServices.getFriendRequestsReceived(mAdapter, this);
+        getmGetAllGameRequestsReceivedListener = mLiveFriendServices.getGameRequestsReceived(mAdapter, this);
 
         mGetAllFriendRequestReceivedReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_FRIEND_REQUEST_RECEIVED)
                 .child(CONSTANT.encodeEmail(mUserEmailString));
 
-        mGetAllFriendRequestsSentReference.addValueEventListener(mGetAllFriendRequestsListener);
+        mGetAllGameRequestsReceivedReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_RECEIVED)
+                .child(CONSTANT.encodeEmail(mUserEmailString));
+
+        mGetAllFriendRequestsSentReference.addValueEventListener(mGetAllFriendRequestsSentListener);
+        mGetAllGameRequestsSentReference.addValueEventListener(mGetAllGameRequestsSentListener);
 
         mGetAllFriendRequestReceivedReference.addValueEventListener(getmGetAllFriendRequestsReceivedListener);
+        mGetAllGameRequestsReceivedReference.addValueEventListener(getmGetAllGameRequestsReceivedListener);
 
         mGetAllCurrentUsersFriendsReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_USER_FRIENDS)
@@ -216,6 +285,11 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
         mFriendRequestsSentMap.putAll(friendRequestsSentMap);
     }
 
+    public void setmGameRequestsSentMap(HashMap<String, User> gameRequestsSentMap) {
+        mGameRequestsSentMap.clear();
+        mGameRequestsSentMap.putAll(gameRequestsSentMap);
+    }
+
     public ValueEventListener getAllUsers(final FindFriendsAdapter adapter, String currentUserEmail){
         return new ValueEventListener() {
             @Override
@@ -247,12 +321,22 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
         }
 
         if(mGetAllFriendRequestsSentReference != null){
-            mGetAllFriendRequestsSentReference.removeEventListener(mGetAllFriendRequestsListener);
+            mGetAllFriendRequestsSentReference.removeEventListener(mGetAllFriendRequestsSentListener);
         }
+
+        if(mGetAllGameRequestsSentReference != null){
+            mGetAllGameRequestsSentReference.removeEventListener(mGetAllGameRequestsSentListener);
+        }
+
 
         if(getmGetAllFriendRequestsReceivedListener != null){
             mGetAllFriendRequestReceivedReference.removeEventListener(getmGetAllFriendRequestsReceivedListener);
         }
+
+        if(getmGetAllGameRequestsReceivedListener != null){
+            mGetAllGameRequestsReceivedReference.removeEventListener(getmGetAllGameRequestsReceivedListener);
+        }
+
 
         if(mGetAllCurrentUsersFriendsListener !=null){
             mGetAllCurrentUsersFriendsReference.removeEventListener(mGetAllCurrentUsersFriendsListener);
@@ -265,8 +349,12 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
         mSocket.disconnect();
     }
 
+    /*
     @Override
     public void OnUserClicked(User user) {
+
+        Toast.makeText(getActivity(), "Friend Click", Toast.LENGTH_SHORT).show();
+
         if (CONSTANT.isIncludedInMap(mFriendRequestsSentMap,user)){
             mGetAllFriendRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
                     .removeValue();
@@ -279,4 +367,25 @@ public class FindFriendFragment extends BaseFragment implements FindFriendsAdapt
             mCompositeSubscription.add(mLiveFriendServices.addOrRemoveFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
         }
     }
+    */
+
+    /*
+    @Override
+    public void GameInviteClicked(User user) {
+        Toast.makeText(getActivity(), "Game Click", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
+
+        if (CONSTANT.isIncludedInMap(mGameRequestsSentMap,user)){
+            mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                    .removeValue();
+
+            mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+        } else{
+            mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                    .setValue(user);
+
+            mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+        }
+    }
+    */
 }

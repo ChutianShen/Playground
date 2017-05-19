@@ -9,8 +9,8 @@ import java.util.HashMap;
  */
 
 public class CONSTANT {
-    //public static final String IP_LOCAL_HOST = "http://169.231.22.159:4000";
-    public static final String IP_LOCAL_HOST = "https://playgroundserver.herokuapp.com";
+    public static final String IP_LOCAL_HOST = "http://169.231.23.58:4000";
+    //public static final String IP_LOCAL_HOST = "https://playgroundserver.herokuapp.com";
 
     public static final String USER_INFO_PREFERENCE = "USER_INFO_PREFERENCE";
     public static final String USER_EMAIL = "USER_EMAIL";
@@ -20,6 +20,9 @@ public class CONSTANT {
     public static final String FIRE_BASE_PATH_USERS = "users";
     public static final String FIRE_BASE_PATH_FRIEND_REQUEST_SENT = "friendRequestsSent";
     public static final String FIRE_BASE_PATH_FRIEND_REQUEST_RECEIVED = "friendRequestReceieved";
+    public static final String FIRE_BASE_PATH_GAME_REQUEST_SENT = "gameRequestsSent";
+    public static final String FIRE_BASE_PATH_GAME_REQUEST_RECEIVED = "gameRequestReceieved";
+
     public static final String FIRE_BASE_PATH_USER_FRIENDS = "userFriends";
     public static final String FIRE_BASE_PATH_USER_TOKEN = "userToken";
 

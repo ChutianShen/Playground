@@ -1,9 +1,12 @@
 package com.example.kevin_sct.beastchat.services;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.entites.ChatRoom;
@@ -96,6 +99,42 @@ public class LiveFriendServices {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //Log.i("Friend", "Friend Sent Change");
+
+                users.clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    users.add(user);
+                }
+
+                if(users.isEmpty()){
+                    recyclerView.setVisibility(View.GONE);
+                    textView.setVisibility(View.VISIBLE);
+                }else{
+                    recyclerView.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.GONE);
+                    adapter.setmUsers(users);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    public ValueEventListener getAllGameRequests(final FriendRequestAdapter adapter, final RecyclerView recyclerView, final TextView textView){
+
+        final List<User> users = new ArrayList<>();
+
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Log.i("Friend", "Friend Sent Change");
+
                 users.clear();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
@@ -165,6 +204,52 @@ public class LiveFriendServices {
     }
 
 
+    public Subscription addOrRemoveGameRequest(final Socket socket, String userEmail, String friendEmail, String requestCode){
+        List<String> details = new ArrayList<>();
+
+        details.add(userEmail);
+        details.add(friendEmail);
+        details.add(requestCode);
+
+        Observable<List<String>> listObservable = Observable.just(details);
+
+        return listObservable
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<List<String>, Integer>() {
+                    @Override
+                    public Integer call(List<String> strings) {
+                        JSONObject sendData = new JSONObject();
+
+                        try {
+                            sendData.put("userEmail",strings.get(0));
+                            sendData.put("friendEmail",strings.get(1));
+                            sendData.put("requestCode",strings.get(2));
+                            socket.emit("gameRequest",sendData);
+                            return SERVER_SUCCESS;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            return SERVER_FAILURE;
+                        }
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+                });
+    }
+
     public Subscription addOrRemoveFriendRequest(final Socket socket, String userEmail, String friendEmail, String requestCode){
         List<String> details = new ArrayList<>();
 
@@ -210,6 +295,8 @@ public class LiveFriendServices {
                     }
                 });
     }
+
+
 
     public ValueEventListener getAllChatRooms(final RecyclerView recyclerView, final TextView textView,
                                               final ChatRoomViewAdapter adapter){
@@ -376,7 +463,7 @@ public class LiveFriendServices {
 
     public ValueEventListener getFriendRequestsSent(final FindFriendsAdapter adapter, final FindFriendFragment fragment){
         final HashMap<String, User> userHashMap = new HashMap<>();
-
+        Log.i("Friend", "Friend Sent Change");
         return new ValueEventListener() {
 
             @Override
@@ -389,6 +476,33 @@ public class LiveFriendServices {
 
                 adapter.setmFriendRequestSentMap(userHashMap);
                 fragment.setmFriendRequestsSentMap(userHashMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    public ValueEventListener getGameRequestsSent(final FindFriendsAdapter adapter, final FindFriendFragment fragment, final Activity mActivity){
+        final HashMap<String, User> userHashMap2 = new HashMap<>();
+        Log.i("Friend", "Game Sent Change");
+        return new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userHashMap2.clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User user = snapshot.getValue(User.class);
+                    if(user == null){
+                        Toast.makeText(mActivity, "Can't find user in Database", Toast.LENGTH_SHORT).show();
+                    }
+                    userHashMap2.put(user.getEmail(), user);
+                }
+
+                adapter.setmGameRequestSentMap(userHashMap2);
+                fragment.setmGameRequestsSentMap(userHashMap2);
             }
 
             @Override
@@ -413,6 +527,30 @@ public class LiveFriendServices {
 
                 adapter.setmFriendRequestReceivedMap(userHashMap);
                 fragment.setmFriendRequestsSentMap(userHashMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    public ValueEventListener getGameRequestsReceived(final FindFriendsAdapter adapter, final FindFriendFragment fragment){
+        final HashMap<String, User> userHashMap = new HashMap<>();
+
+        return new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userHashMap.clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User user = snapshot.getValue(User.class);
+                    userHashMap.put(user.getEmail(), user);
+                }
+
+                adapter.setmGameRequestReceivedMap(userHashMap);
+                fragment.setmGameRequestsSentMap(userHashMap);
             }
 
             @Override

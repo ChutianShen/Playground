@@ -46,6 +46,9 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
     private DatabaseReference mGetAllUsersFriendRequestReference;
     private ValueEventListener mGetAllUserFriendRequestListener;
 
+    private DatabaseReference mGetAllUsersGameRequestReference;
+    private ValueEventListener mGetAllUserGameRequestListener;
+
     private Unbinder mUnbinder;
 
     private String mUserEmailString;
@@ -83,10 +86,14 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
         mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mGetAllUsersFriendRequestReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_FRIEND_REQUEST_RECEIVED).child(CONSTANT.encodeEmail(mUserEmailString));
+        mGetAllUsersGameRequestReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_RECEIVED).child(CONSTANT.encodeEmail(mUserEmailString));
 
         mGetAllUserFriendRequestListener = mLiveFriendServices.getAllFriendRequests(adapter, mRecycleView, mTextView);
-
         mGetAllUsersFriendRequestReference.addValueEventListener(mGetAllUserFriendRequestListener);
+
+        mGetAllUserGameRequestListener = mLiveFriendServices.getAllGameRequests(adapter, mRecycleView, mTextView);
+        mGetAllUsersGameRequestReference.addValueEventListener(mGetAllUserGameRequestListener);
 
         mRecycleView.setAdapter(adapter);
 
