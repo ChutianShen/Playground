@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
 import com.example.kevin_sct.beastchat.entites.User;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
 import com.example.kevin_sct.beastchat.views.FriendRequestViews.FriendRequestAdapter;
+import com.example.kevin_sct.beastchat.views.GameRequestViews.GameRequestAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -33,13 +35,19 @@ import io.socket.client.Socket;
  * Created by kevin_sct on 4/28/17.
  */
 
-public class FriendRequestFragment extends BaseFragment implements FriendRequestAdapter.OnOptionListener {
+public class FriendRequestFragment extends BaseFragment {
 
     @BindView(R.id.fragment_friend_request_recyclerView)
-    RecyclerView mRecycleView;
+    RecyclerView mFriendRecycleView;
+
+    @BindView(R.id.fragment_game_request_recyclerView)
+    RecyclerView mGameRecycleView;
 
     @BindView(R.id.fragment_friend_request_message)
     TextView mTextView;
+
+    @BindView(R.id.request_linearlayout)
+    LinearLayout mLinearLayout;
 
     private LiveFriendServices mLiveFriendServices;
 
@@ -48,6 +56,9 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
 
     private DatabaseReference mGetAllUsersGameRequestReference;
     private ValueEventListener mGetAllUserGameRequestListener;
+
+    private FriendRequestAdapter.OnOptionListener mFriendListener;
+    private GameRequestAdapter.GameOnOptionListener mGameListener;
 
     private Unbinder mUnbinder;
 
@@ -80,22 +91,71 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
         View rootView = inflater.inflate(R.layout.fragment_friend_request, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
 
+        mFriendListener = new FriendRequestAdapter.OnOptionListener() {
+            @Override
+            public void OnOptionClicked(User user, String result) {
+                if(result.equals("0")){
+                    DatabaseReference userFriendReference = FirebaseDatabase.getInstance().getReference()
+                            .child(CONSTANT.FIRE_BASE_PATH_USER_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString))
+                            .child(CONSTANT.encodeEmail(user.getEmail()));
 
-        FriendRequestAdapter adapter = new FriendRequestAdapter((BaseFragmentActivity) getActivity(), this);
+                    userFriendReference.setValue(user);
+                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+                }  else {
+                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+                }
+            }
+        };
+        mGameListener = new GameRequestAdapter.GameOnOptionListener() {
+            @Override
+            public void GameOnOptionClicked(User user, String result) {
+                if(result.equals("0")){
+                    /*
+                    DatabaseReference userFriendReference = FirebaseDatabase.getInstance().getReference()
+                            .child(CONSTANT.FIRE_BASE_PATH_USER_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString))
+                            .child(CONSTANT.encodeEmail(user.getEmail()));
 
-        mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    userFriendReference.setValue(user);
+                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+                    */
+                    Toast.makeText(getActivity(), "Decline the request", Toast.LENGTH_SHORT).show();
+                }  else {
+                    /*
+                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+                    */
+                    Toast.makeText(getActivity(), "Accept the request", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        FriendRequestAdapter adapter = new FriendRequestAdapter((BaseFragmentActivity) getActivity(), mFriendListener);
+        GameRequestAdapter adapterGame = new GameRequestAdapter((BaseFragmentActivity) getActivity(), mGameListener);
+
+        mFriendRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mGameRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mGetAllUsersFriendRequestReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_FRIEND_REQUEST_RECEIVED).child(CONSTANT.encodeEmail(mUserEmailString));
         mGetAllUsersGameRequestReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_RECEIVED).child(CONSTANT.encodeEmail(mUserEmailString));
 
-        mGetAllUserFriendRequestListener = mLiveFriendServices.getAllFriendRequests(adapter, mRecycleView, mTextView);
+        mGetAllUserFriendRequestListener = mLiveFriendServices.getAllFriendRequests(adapter, mFriendRecycleView, mTextView);
         mGetAllUsersFriendRequestReference.addValueEventListener(mGetAllUserFriendRequestListener);
 
-        mGetAllUserGameRequestListener = mLiveFriendServices.getAllGameRequests(adapter, mRecycleView, mTextView);
+        mGetAllUserGameRequestListener = mLiveFriendServices.getAllGameRequests(adapterGame, mGameRecycleView, mTextView);
         mGetAllUsersGameRequestReference.addValueEventListener(mGetAllUserGameRequestListener);
 
-        mRecycleView.setAdapter(adapter);
+        mFriendRecycleView.setAdapter(adapter);
+        mGameRecycleView.setAdapter(adapterGame);
+
+
 
         return rootView;
     }
@@ -108,8 +168,13 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
         if(mGetAllUserFriendRequestListener != null){
             mGetAllUsersFriendRequestReference.removeEventListener(mGetAllUserFriendRequestListener);
         }
+
+        if(mGetAllUserGameRequestListener != null){
+            mGetAllUsersGameRequestReference.removeEventListener(mGetAllUserGameRequestListener);
+        }
     }
 
+    /*
     @Override
     public void OnOptionClicked(User user, String result) {
         if(result.equals("0")){
@@ -127,6 +192,7 @@ public class FriendRequestFragment extends BaseFragment implements FriendRequest
             mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
         }
     }
+    */
 
     @Override
     public void onDestroy() {

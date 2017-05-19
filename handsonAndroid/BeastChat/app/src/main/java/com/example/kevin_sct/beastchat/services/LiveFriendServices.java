@@ -16,6 +16,7 @@ import com.example.kevin_sct.beastchat.fragments.FindFriendFragment;
 import com.example.kevin_sct.beastchat.views.ChatRoomViews.ChatRoomViewAdapter;
 import com.example.kevin_sct.beastchat.views.FindFriendsViews.FindFriendsAdapter;
 import com.example.kevin_sct.beastchat.views.FriendRequestViews.FriendRequestAdapter;
+import com.example.kevin_sct.beastchat.views.GameRequestViews.GameRequestAdapter;
 import com.example.kevin_sct.beastchat.views.MessageViews.MessageViewAdapter;
 import com.example.kevin_sct.beastchat.views.UserFriendViews.UserFriendAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -125,7 +126,7 @@ public class LiveFriendServices {
         };
     }
 
-    public ValueEventListener getAllGameRequests(final FriendRequestAdapter adapter, final RecyclerView recyclerView, final TextView textView){
+    public ValueEventListener getAllGameRequests(final GameRequestAdapter adapter, final RecyclerView recyclerView, final TextView textView){
 
         final List<User> users = new ArrayList<>();
 
