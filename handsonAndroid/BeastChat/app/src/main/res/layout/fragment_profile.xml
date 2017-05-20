@@ -123,5 +123,14 @@
         android:layout_toRightOf="@+id/fragment_profile_userPicture"
         android:text="goBang" />
 
+    <Button
+        android:id="@+id/dual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/enterConnect3"
+        android:layout_alignEnd="@+id/fragment_profile_image_Picture"
+        android:layout_alignRight="@+id/fragment_profile_image_Picture"
+        android:text="DUAL!" />
+
 
 </RelativeLayout>

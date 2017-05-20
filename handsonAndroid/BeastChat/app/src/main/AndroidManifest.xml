@@ -66,6 +66,10 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.ProfileActivity"/>
 
+        <activity android:name=".activities.RSPActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.ProfileActivity"/>
+
         <activity android:name=".activities.MessageActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.InboxActivity"/>

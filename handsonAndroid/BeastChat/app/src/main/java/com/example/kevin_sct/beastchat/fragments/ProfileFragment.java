@@ -21,6 +21,7 @@ import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.Utils.MarshMellowPermisson;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
 import com.example.kevin_sct.beastchat.activities.GameActivity;
+import com.example.kevin_sct.beastchat.activities.RSPActivity;
 import com.example.kevin_sct.beastchat.aty.InitAty;
 import com.example.kevin_sct.beastchat.services.LiveAccountServices;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
@@ -194,7 +195,13 @@ public class ProfileFragment extends BaseFragment {
         mFragmentManager.beginTransaction().addToBackStack(null);
         mFragmentManager.beginTransaction().commit();
         */
+    }
 
+    @OnClick(R.id.dual)
+    public void dual(){
+        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+
+        startActivity(new Intent(getActivity(), RSPActivity.class));
     }
 
     @OnClick(R.id.fragment_profile_camera_Picture)

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.kevin_sct.beastchat.activities.RSPActivity"
+    tools:showIn="@layout/activity_main">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/paperButton"
+            android:layout_width="188dp"
+            android:layout_height="150dp"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:background="@drawable/paper" />
+
+        <ImageButton
+            android:id="@+id/scissorsButton"
+            android:layout_width="188dp"
+            android:layout_height="162dp"
+            android:layout_weight="1"
+            android:background="@drawable/scissors" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/rockButton"
+        android:layout_width="184dp"
+        android:layout_height="153dp"
+        android:layout_below="@id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/rock" />
+
+    <TextView
+        android:id="@+id/CPUChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rockButton"
+        android:layout_gravity="bottom"
+        android:text="Computers_Choice"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/computerChoice"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_below="@id/CPUChoice"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/endButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="End_Game" />
+
+</RelativeLayout>
