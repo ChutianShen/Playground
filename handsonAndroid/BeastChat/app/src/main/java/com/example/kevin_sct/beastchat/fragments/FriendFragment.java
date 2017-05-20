@@ -45,6 +45,9 @@ public class FriendFragment extends BaseFragment {
     private LiveFriendServices mLiveFriendServices;
     private DatabaseReference mAllFriendRequestReference;
     private ValueEventListener mAllFriendRequestListener;
+
+    private DatabaseReference mAllGameRequestReference;
+    private ValueEventListener mAllGameRequestListener;
     private String mUserEmailString;
 
     private DatabaseReference mUsersNewMessagesReference;
@@ -81,6 +84,11 @@ public class FriendFragment extends BaseFragment {
         mAllFriendRequestListener = mLiveFriendServices.getFriendRequestBottom(mBottomBar,R.id.tab_friends);
         mAllFriendRequestReference.addValueEventListener(mAllFriendRequestListener);
 
+        mAllGameRequestListener = mLiveFriendServices.getGameRequestBottom(mBottomBar, R.id.tab_friends);
+        mAllGameRequestReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_RECEIVED)
+                .child(CONSTANT.encodeEmail(mUserEmailString));
+        mAllGameRequestReference.addValueEventListener(mAllGameRequestListener);
 
         return rootView;
     }
@@ -91,6 +99,10 @@ public class FriendFragment extends BaseFragment {
         mUnbinder.unbind();
         if (mAllFriendRequestListener!=null){
             mAllFriendRequestReference.removeEventListener(mAllFriendRequestListener);
+        }
+
+        if(mAllGameRequestListener != null){
+            mAllGameRequestReference.removeEventListener(mAllGameRequestListener);
         }
 
         if (mUsersNewMessagesListener!=null){

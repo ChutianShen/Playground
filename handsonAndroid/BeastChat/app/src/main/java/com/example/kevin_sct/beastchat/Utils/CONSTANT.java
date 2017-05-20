@@ -24,6 +24,7 @@ public class CONSTANT {
     public static final String FIRE_BASE_PATH_GAME_REQUEST_RECEIVED = "gameRequestReceieved";
 
     public static final String FIRE_BASE_PATH_USER_FRIENDS = "userFriends";
+    public static final String FIRE_BASE_PATH_USER_GAME_FRIENDS = "userGameFriends";
     public static final String FIRE_BASE_PATH_USER_TOKEN = "userToken";
 
     public static final String FIRE_BASE_PATH_USER_MESSAGES = "userMessages";

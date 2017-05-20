@@ -204,6 +204,53 @@ public class LiveFriendServices {
                 });
     }
 
+    public Subscription approveDeclineGameRequest(final Socket socket, String userEmail, String friendEmail, String requestCode){
+        List<String> details = new ArrayList<>();
+        details.add(userEmail);
+        details.add(friendEmail);
+        details.add(requestCode);
+
+        Observable<List<String>> listObservable = Observable.just(details);
+
+        Log.i("approve","approve or decline function works");
+
+        return listObservable
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<List<String>, Integer>() {
+                    @Override
+                    public Integer call(List<String> strings) {
+                        JSONObject sendData = new JSONObject();
+
+                        try {
+                            sendData.put("userEmail",strings.get(0));
+                            sendData.put("friendEmail",strings.get(1));
+                            sendData.put("requestCode",strings.get(2));
+                            socket.emit("gameRequestResponse",sendData);
+                            return SERVER_SUCCESS;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            return SERVER_FAILURE;
+                        }
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+                });
+    }
+
 
     public Subscription addOrRemoveGameRequest(final Socket socket, String userEmail, String friendEmail, String requestCode){
         List<String> details = new ArrayList<>();
@@ -562,6 +609,32 @@ public class LiveFriendServices {
     }
 
     public ValueEventListener getFriendRequestBottom(final BottomBar bottomBar, final int tagId){
+        final List<User> users = new ArrayList<>();
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User user = snapshot.getValue(User.class);
+                    users.add(user);
+                }
+
+                if (!users.isEmpty()){      // we do have some requests
+                    bottomBar.getTabWithId(tagId).setBadgeCount(users.size());
+                } else{
+                    bottomBar.getTabWithId(tagId).removeBadge();    //if our actual user lists are ampty, it means we have no friend request. And it should not have anything in the bottom bar
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    public ValueEventListener getGameRequestBottom(final BottomBar bottomBar, final int tagId){
         final List<User> users = new ArrayList<>();
         return new ValueEventListener() {
             @Override

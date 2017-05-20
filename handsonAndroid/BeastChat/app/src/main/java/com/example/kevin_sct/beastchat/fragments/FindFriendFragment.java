@@ -135,17 +135,17 @@ public class FindFriendFragment extends BaseFragment  {
         mListener = new FindFriendsAdapter.UserListener() {
             @Override
             public void OnUserClicked(User user) {
-                Toast.makeText(getActivity(), "Friend Click", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Friend Click", Toast.LENGTH_SHORT).show();
 
                 if (CONSTANT.isIncludedInMap(mFriendRequestsSentMap,user)){
                     mGetAllFriendRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
-                    Toast.makeText(getActivity(), "Friend Request not empty", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Friend Request not empty", Toast.LENGTH_SHORT).show();
                     mCompositeSubscription.add(mLiveFriendServices.addOrRemoveFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
                 } else{
                     mGetAllFriendRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .setValue(user);
-                    Toast.makeText(getActivity(), "Friend Request IS empty", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Friend Request IS empty", Toast.LENGTH_SHORT).show();
                     mCompositeSubscription.add(mLiveFriendServices.addOrRemoveFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
                 }
             }
@@ -153,8 +153,8 @@ public class FindFriendFragment extends BaseFragment  {
         mGamerInviteListener = new FindFriendsAdapter.GameInviteListener() {
             @Override
             public void GameInviteClicked(User user) {
-                Toast.makeText(getActivity(), "Game Click", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Game Click", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), user.getEmail(), Toast.LENGTH_SHORT).show();
 
                 if(mGameRequestsSentMap == null || mGameRequestsSentMap.isEmpty()){
                     Toast.makeText(getActivity(), "GameRequestSent is null or empty", Toast.LENGTH_SHORT).show();
@@ -164,12 +164,12 @@ public class FindFriendFragment extends BaseFragment  {
                 if (CONSTANT.isIncludedInMap(mGameRequestsSentMap,user)){
                     mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
-                    Toast.makeText(getActivity(), "Game Request not empty", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Game Request not empty", Toast.LENGTH_SHORT).show();
                     mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
                 } else{
                     mGetAllGameRequestsSentReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .setValue(user);
-                    Toast.makeText(getActivity(), "Game Request is empty", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Game Request is empty", Toast.LENGTH_SHORT).show();
                     mCompositeSubscription.add(mLiveFriendServices.addOrRemoveGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
                 }
             }

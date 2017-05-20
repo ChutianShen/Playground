@@ -114,24 +114,22 @@ public class FriendRequestFragment extends BaseFragment {
             @Override
             public void GameOnOptionClicked(User user, String result) {
                 if(result.equals("0")){
-                    /*
-                    DatabaseReference userFriendReference = FirebaseDatabase.getInstance().getReference()
-                            .child(CONSTANT.FIRE_BASE_PATH_USER_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString))
+                    DatabaseReference userFriendGameReference = FirebaseDatabase.getInstance().getReference()
+                            .child(CONSTANT.FIRE_BASE_PATH_USER_GAME_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString))
                             .child(CONSTANT.encodeEmail(user.getEmail()));
 
-                    userFriendReference.setValue(user);
-                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                    userFriendGameReference.setValue(user);
+                    mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
-                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
-                    */
-                    Toast.makeText(getActivity(), "Decline the request", Toast.LENGTH_SHORT).show();
-                }  else {
-                    /*
-                    mGetAllUsersFriendRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
-                            .removeValue();
-                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineFriendRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
-                    */
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
+
                     Toast.makeText(getActivity(), "Accept the request", Toast.LENGTH_SHORT).show();
+                }  else {
+                    mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
+                            .removeValue();
+                    mCompositeSubscription.add(mLiveFriendServices.approveDeclineGameRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
+
+                    Toast.makeText(getActivity(), "Decline the request", Toast.LENGTH_SHORT).show();
                 }
             }
         };

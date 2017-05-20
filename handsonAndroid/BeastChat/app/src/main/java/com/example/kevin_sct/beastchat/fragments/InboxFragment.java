@@ -50,6 +50,9 @@ public class InboxFragment extends BaseFragment implements ChatRoomViewAdapter.C
     private DatabaseReference mAllFriendRequestsReference;
     private ValueEventListener mAllFriendRequestsListener;
 
+    private DatabaseReference mAllGameRequestReference;
+    private ValueEventListener mAllGameRequestListener;
+
 
     private DatabaseReference mUserChatRoomReference;
     private ValueEventListener mUserChatRoomListener;
@@ -93,6 +96,11 @@ public class InboxFragment extends BaseFragment implements ChatRoomViewAdapter.C
         mAllFriendRequestsListener = mLiveFriendsService.getFriendRequestBottom(mBottomBar,R.id.tab_friends);
         mAllFriendRequestsReference.addValueEventListener(mAllFriendRequestsListener);
 
+        mAllGameRequestListener = mLiveFriendsService.getGameRequestBottom(mBottomBar, R.id.tab_friends);
+        mAllGameRequestReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_GAME_REQUEST_RECEIVED)
+                .child(CONSTANT.encodeEmail(mUserEmailString));
+        mAllGameRequestReference.addValueEventListener(mAllGameRequestListener);
 
         mUsersNewMessagesReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_USER_NEW_MESSAGES).child(CONSTANT.encodeEmail(mUserEmailString));
@@ -110,6 +118,10 @@ public class InboxFragment extends BaseFragment implements ChatRoomViewAdapter.C
         mUnbinder.unbind();
         if (mAllFriendRequestsListener!=null){
             mAllFriendRequestsReference.removeEventListener(mAllFriendRequestsListener);
+        }
+
+        if(mAllGameRequestListener != null){
+            mAllGameRequestReference.removeEventListener(mAllGameRequestListener);
         }
 
         if (mUsersNewMessagesListener!=null){

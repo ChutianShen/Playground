@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kevin_sct.beastchat.R;
 import com.example.kevin_sct.beastchat.Utils.CONSTANT;
@@ -68,16 +67,16 @@ public class FindFriendsViewHolder extends RecyclerView.ViewHolder{
 
             mInviteGame.setImageResource(R.mipmap.ic_cancel_game);
             mInviteGame.setVisibility(View.VISIBLE);
-            Toast.makeText(context, "Game " + user.getEmail() + " Game Sent", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Game " + user.getEmail() + " Game Sent", Toast.LENGTH_SHORT).show();
         } else if(CONSTANT.isIncludedInMap(gameRequestReceivedMap, user)){
             //mInviteGame.setImageResource(R.mipmap.ic_cancel_game);
             //mInviteGame.setVisibility(View.VISIBLE);
             mInviteGame.setVisibility(View.GONE);
-            Toast.makeText(context, "Game " + user.getEmail() + " Game Receive", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Game " + user.getEmail() + " Game Receive", Toast.LENGTH_SHORT).show();
         }  else{
             mInviteGame.setVisibility(View.VISIBLE);
             mInviteGame.setImageResource(R.mipmap.ic_launcher);
-            Toast.makeText(context, "Game " + user.getEmail() + " else", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Game " + user.getEmail() + " else", Toast.LENGTH_SHORT).show();
         }
 
         if(CONSTANT.isIncludedInMap(friendRequestSentMap, user)){
@@ -85,12 +84,12 @@ public class FindFriendsViewHolder extends RecyclerView.ViewHolder{
             mUserStatus.setText("Friend Request Sent");
             mAddFriend.setImageResource(R.mipmap.ic_cancel_request);
             mAddFriend.setVisibility(View.VISIBLE);
-            Toast.makeText(context, "Friend " + user.getEmail() + " Friend Sent", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Friend " + user.getEmail() + " Friend Sent", Toast.LENGTH_SHORT).show();
         } else if(CONSTANT.isIncludedInMap(friendRequestReceivedMap, user)) {
             mAddFriend.setVisibility(View.GONE);
             mUserStatus.setVisibility(View.VISIBLE);
             mUserStatus.setText("This user wants to be friend with you!");
-            Toast.makeText(context, "Friend " + user.getEmail() + " Friend Receive", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Friend " + user.getEmail() + " Friend Receive", Toast.LENGTH_SHORT).show();
         } else if(CONSTANT.isIncludedInMap(currentUserFriendMap, user)){
             mUserStatus.setVisibility(View.VISIBLE);
             mUserStatus.setText("You are friends now!");
@@ -101,7 +100,7 @@ public class FindFriendsViewHolder extends RecyclerView.ViewHolder{
             mAddFriend.setVisibility(View.VISIBLE);
             mUserStatus.setVisibility(View.GONE);
             mAddFriend.setImageResource(R.mipmap.ic_add);
-            Toast.makeText(context, "Friend " + user.getEmail() + " else", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Friend " + user.getEmail() + " else", Toast.LENGTH_SHORT).show();
         }
 
 
