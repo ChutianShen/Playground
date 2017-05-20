@@ -1,6 +1,7 @@
 package com.example.kevin_sct.beastchat.services;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -92,6 +93,28 @@ public class LiveFriendServices {
         };
     }
 
+    public ValueEventListener getAllGameFriends(final Intent intent, final Activity activityNow){
+        final List<User> users = new ArrayList<>();
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
+                for (DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    User user =snapshot.getValue(User.class);
+                    users.add(user);
+                }
+                if(!users.isEmpty())
+                    activityNow.startActivity(intent);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
 
     public ValueEventListener getAllFriendRequests(final FriendRequestAdapter adapter, final RecyclerView recyclerView, final TextView textView){
 
@@ -133,9 +156,6 @@ public class LiveFriendServices {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Log.i("Friend", "Friend Sent Change");
-
                 users.clear();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);

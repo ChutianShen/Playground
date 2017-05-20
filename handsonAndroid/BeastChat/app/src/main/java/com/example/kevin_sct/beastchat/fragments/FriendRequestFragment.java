@@ -1,5 +1,6 @@
 package com.example.kevin_sct.beastchat.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.kevin_sct.beastchat.R;
 import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
+import com.example.kevin_sct.beastchat.activities.RSPActivity;
 import com.example.kevin_sct.beastchat.entites.User;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
 import com.example.kevin_sct.beastchat.views.FriendRequestViews.FriendRequestAdapter;
@@ -56,6 +58,9 @@ public class FriendRequestFragment extends BaseFragment {
 
     private DatabaseReference mGetAllUsersGameRequestReference;
     private ValueEventListener mGetAllUserGameRequestListener;
+
+    private DatabaseReference mGetAllCurrenUsersGameFriendsReference;
+    private ValueEventListener mGetAllCurrentUsersGameFriendsListener;
 
     private FriendRequestAdapter.OnOptionListener mFriendListener;
     private GameRequestAdapter.GameOnOptionListener mGameListener;
@@ -122,13 +127,12 @@ public class FriendRequestFragment extends BaseFragment {
                     mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
                     mCompositeSubscription.add(mLiveFriendServices.approveDeclineGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
-
+                    startActivity(new Intent(getActivity(), RSPActivity.class));
                     Toast.makeText(getActivity(), "Accept the request", Toast.LENGTH_SHORT).show();
                 }  else {
                     mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
                     mCompositeSubscription.add(mLiveFriendServices.approveDeclineGameRequest(mSocket, mUserEmailString, user.getEmail(), "1"));
-
                     Toast.makeText(getActivity(), "Decline the request", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -149,6 +153,16 @@ public class FriendRequestFragment extends BaseFragment {
 
         mGetAllUserGameRequestListener = mLiveFriendServices.getAllGameRequests(adapterGame, mGameRecycleView, mTextView);
         mGetAllUsersGameRequestReference.addValueEventListener(mGetAllUserGameRequestListener);
+
+
+        mGetAllCurrenUsersGameFriendsReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_USER_GAME_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString));
+
+        Intent intent = new Intent(getActivity(), RSPActivity.class);
+        mGetAllCurrentUsersGameFriendsListener = mLiveFriendServices.getAllGameFriends(intent, getActivity());
+
+        mGetAllCurrenUsersGameFriendsReference.addValueEventListener(mGetAllCurrentUsersGameFriendsListener);
+
 
         mFriendRecycleView.setAdapter(adapter);
         mGameRecycleView.setAdapter(adapterGame);

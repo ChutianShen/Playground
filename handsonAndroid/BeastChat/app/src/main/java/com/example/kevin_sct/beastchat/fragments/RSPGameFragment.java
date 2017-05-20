@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.kevin_sct.beastchat.R;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -52,6 +54,9 @@ public class RSPGameFragment extends Fragment {
     @BindView(R.id.computerChoice)
     ImageView comChoice;
     //final ImageView comChoice = (ImageView) findViewById(R.id.computerChoice);
+
+    private DatabaseReference mGetAllCurrenUsersGameFriendsReference;
+    private ValueEventListener mGetAllCurrentUsersGameFriendsListener;
 
     private Unbinder mUnbinder;
 
