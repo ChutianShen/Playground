@@ -103,8 +103,32 @@ public class LiveFriendServices {
                     User user =snapshot.getValue(User.class);
                     users.add(user);
                 }
-                if(!users.isEmpty())
+                if(!users.isEmpty()) {
                     activityNow.startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    public ValueEventListener getGameFriendName(final TextView opponentName){
+        final List<User> users = new ArrayList<>();
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
+                for (DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    User user =snapshot.getValue(User.class);
+                    users.add(user);
+                }
+                if(!users.isEmpty()) {
+                    opponentName.setText(users.get(0).getEmail());
+                }
 
             }
 

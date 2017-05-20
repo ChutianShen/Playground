@@ -1,33 +1,42 @@
 package com.example.kevin_sct.beastchat.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kevin_sct.beastchat.R;
+import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
+import com.example.kevin_sct.beastchat.activities.RSPActivity;
+import com.example.kevin_sct.beastchat.services.LiveFriendServices;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 /**
  * Created by kevin_sct on 5/19/17.
  */
 
-public class RSPGameFragment extends Fragment {
+public class RSPGameFragment extends BaseFragment {
 
     private ArrayList<String> list = new ArrayList<String>(3);
     private int wins = 0;
@@ -37,28 +46,28 @@ public class RSPGameFragment extends Fragment {
 
     @BindView(R.id.rockButton)
     ImageView RockButton;
-    //ImageButton RockButton = (ImageButton) findViewById(R.id.rockButton);
 
     @BindView(R.id.paperButton)
     ImageView PaperButton;
-    //ImageButton PaperButton = (ImageButton) findViewById(R.id.paperButton);
 
     @BindView(R.id.scissorsButton)
     ImageView ScissorsButton;
-    //ImageButton ScissorsButton = (ImageButton) findViewById(R.id.scissorsButton);
 
     @BindView(R.id.endButton)
     Button EndButton;
-    //Button EndButton = (Button) findViewById(R.id.endButton);
 
     @BindView(R.id.computerChoice)
     ImageView comChoice;
-    //final ImageView comChoice = (ImageView) findViewById(R.id.computerChoice);
+
+    @BindView(R.id.CPUChoice)
+    TextView opponentName;
 
     private DatabaseReference mGetAllCurrenUsersGameFriendsReference;
     private ValueEventListener mGetAllCurrentUsersGameFriendsListener;
-
+    private LiveFriendServices mLiveFriendServices;
     private Unbinder mUnbinder;
+    private Socket mSocket;
+    private String mUserEmailString;
 
     private BaseFragmentActivity mActivity;
 
@@ -79,6 +88,16 @@ public class RSPGameFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            mSocket = IO.socket(CONSTANT.IP_LOCAL_HOST);
+        } catch (URISyntaxException e) {
+            Log.i(LoginFragment.class.getSimpleName(),e.getMessage());
+            Toast.makeText(getActivity(),"Can't connect to the server",Toast.LENGTH_SHORT).show();
+        }
+
+        mSocket.connect();
+        mLiveFriendServices = LiveFriendServices.getInstance();
+        mUserEmailString = mSharedPreferences.getString(CONSTANT.USER_EMAIL, "");
 
     }
 
@@ -175,6 +194,15 @@ public class RSPGameFragment extends Fragment {
         list.add("rock");
         list.add("paper");
         list.add("scissors");
+
+        mGetAllCurrenUsersGameFriendsReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_USER_GAME_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString));
+
+        Intent intent = new Intent(getActivity(), RSPActivity.class);
+        mGetAllCurrentUsersGameFriendsListener = mLiveFriendServices.getGameFriendName(opponentName);
+
+        mGetAllCurrenUsersGameFriendsReference.addValueEventListener(mGetAllCurrentUsersGameFriendsListener);
+
         return rootView;
         //setContentView(R.layout.activity_main);
 

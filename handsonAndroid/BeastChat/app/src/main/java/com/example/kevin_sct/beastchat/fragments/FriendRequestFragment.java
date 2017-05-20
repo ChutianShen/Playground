@@ -48,6 +48,7 @@ public class FriendRequestFragment extends BaseFragment {
     @BindView(R.id.fragment_friend_request_message)
     TextView mTextView;
 
+
     @BindView(R.id.request_linearlayout)
     LinearLayout mLinearLayout;
 
