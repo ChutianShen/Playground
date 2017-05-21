@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:text="悔   棋"/>
+                android:text="Get back"/>
             <Button
                 android:id="@+id/btn2"
                 android:background="@drawable/renji_button"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:text="重   玩"/>
+                android:text="Replay"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -52,9 +52,9 @@ public class RenjiGobangView extends View {
     private final Paint mPaint = new Paint();
 
     CharSequence mText;
-    CharSequence STRING_WIN = "白棋赢啦!  ";
-    CharSequence STRING_LOSE = "黑棋赢啦!  ";
-    CharSequence STRING_EQUAL = "和棋！  ";
+    CharSequence STRING_WIN = "White WINs!  ";
+    CharSequence STRING_LOSE = "Black WINs!  ";
+    CharSequence STRING_EQUAL = "Tie！  ";
 
     public RenjiGobangView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -567,7 +567,7 @@ public class RenjiGobangView extends View {
                 //如果是悔棋
                 case R.id.btn1:
                     if (storageArray.size() == 0) {
-                        Toast.makeText(getContext(), "开局并不能悔棋", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Sorry, you cannot do this yet.", Toast.LENGTH_SHORT).show();
                     } else {
                         if (storageArray.size() == 2) {
                             storageArray.pop();
@@ -606,7 +606,7 @@ public class RenjiGobangView extends View {
                         showtime[i] = 0;
                     }
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-                    mStatusTextView.setText("人机模式 当前时间：" + simpleDateFormat.format(new Date()));
+                    mStatusTextView.setText("Beat it! Current time：" + simpleDateFormat.format(new Date()));
                     break;
             }
         }

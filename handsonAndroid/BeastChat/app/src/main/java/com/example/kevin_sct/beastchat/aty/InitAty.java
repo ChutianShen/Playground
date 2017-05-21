@@ -120,7 +120,7 @@ public class InitAty extends Activity {
         if (currentTime - lastBackPressed < 2000) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Push again, then QUIT", Toast.LENGTH_SHORT).show();
         }
         lastBackPressed = currentTime;
     }

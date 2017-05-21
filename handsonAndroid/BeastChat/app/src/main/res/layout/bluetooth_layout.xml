@@ -17,7 +17,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/bluetoothsaomiaobtn"
-            android:text="扫描周围的蓝牙玩家"/>　
+            android:text="Scan Nearby Players"/>　
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="玩家ID"
+                android:text="Player ID"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -39,7 +39,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="玩家地址"
+                android:text="Player Address"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -49,7 +49,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="配对情况"
+                android:text="Matching..."
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"/>

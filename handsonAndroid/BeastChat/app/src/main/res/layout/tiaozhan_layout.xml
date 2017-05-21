@@ -8,7 +8,7 @@
     <!-- Line 1 -->
 
     <TextView
-        android:text="收到挑战！"
+        android:text="Get Challenge!"
         android:textSize="28sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -35,7 +35,7 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/tiaozhan_submit"
-            android:text="接受"
+            android:text="ACCEPT"
             android:textSize="15sp"
             android:layout_margin="5dp"
             android:layout_width="0dp"
@@ -44,7 +44,7 @@
             android:layout_weight="1"/>
         <Button
             android:id="@+id/tiaozhan_cancle"
-            android:text="残忍拒绝"
+            android:text="DECLINE"
             android:layout_margin="5dp"
             android:textSize="15sp"
             android:layout_width="0dp"

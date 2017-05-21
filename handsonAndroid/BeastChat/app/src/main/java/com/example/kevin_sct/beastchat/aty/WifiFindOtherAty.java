@@ -59,12 +59,12 @@ public class WifiFindOtherAty extends Activity {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                AlertUtils.toastMess(WifiFindOtherAty.this, "加载成功");
+                AlertUtils.toastMess(WifiFindOtherAty.this, "Load successfully");
             }
 
             @Override
             public void onFailure(int reason) {
-                AlertUtils.toastMess(WifiFindOtherAty.this, "加载失败" + reason);
+                AlertUtils.toastMess(WifiFindOtherAty.this, "Load FAIL" + reason);
             }
         });
     }

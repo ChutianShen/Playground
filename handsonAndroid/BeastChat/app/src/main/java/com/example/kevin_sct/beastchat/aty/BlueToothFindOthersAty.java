@@ -116,7 +116,7 @@ public class BlueToothFindOthersAty extends Activity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(BlueToothFindOthersAty.this, "接收挑战请求，建立连接成功！", Toast.LENGTH_SHORT);
+                                    Toast.makeText(BlueToothFindOthersAty.this, "Get Challenge, Connected! ", Toast.LENGTH_SHORT);
                                     //执行socket方法
 
                                     BlueToothGameAty blueToothGameAty = new BlueToothGameAty();
@@ -176,7 +176,7 @@ public class BlueToothFindOthersAty extends Activity {
 
         //自动开始扫描
         isQuering = true;
-        Toast.makeText(BlueToothFindOthersAty.this, "开始扫描", Toast.LENGTH_SHORT).show();
+        Toast.makeText(BlueToothFindOthersAty.this, "Scanning", Toast.LENGTH_SHORT).show();
         //清空列表
         deviceNameAndDresss.clear();
         //获得已配对的蓝牙设备
@@ -220,9 +220,9 @@ public class BlueToothFindOthersAty extends Activity {
                 //获得客户端Socket
                 kehuduanSocket = device.createRfcommSocketToServiceRecord(Config.UUID);
                 final AlertDialog aDialog = new AlertDialog.Builder(BlueToothFindOthersAty.this).
-                        setTitle("发起对战").
-                        setMessage("确认挑战玩家：" + deviceNameAndDresss.get(position).getDeviceName() + "吗？")
-                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                        setTitle("Fight!").
+                        setMessage("Beat：" + deviceNameAndDresss.get(position).getDeviceName() + " ？")
+                        .setNegativeButton("Sure", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 new Thread(new Runnable() {
@@ -240,7 +240,7 @@ public class BlueToothFindOthersAty extends Activity {
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Toast.makeText(BlueToothFindOthersAty.this, "连接成功！！", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(BlueToothFindOthersAty.this, "Connected!!!", Toast.LENGTH_SHORT).show();
                                                         //执行socket方法
                                                         BlueToothGameAty blueToothGameAty = new BlueToothGameAty();
 
@@ -256,7 +256,7 @@ public class BlueToothFindOthersAty extends Activity {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(BlueToothFindOthersAty.this, "连接失败！！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(BlueToothFindOthersAty.this, "Failed!!!" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                                                 }
                                             });
@@ -277,7 +277,7 @@ public class BlueToothFindOthersAty extends Activity {
                                 }).start();
                             }
                         })
-                        .setPositiveButton("取消", null).show();
+                        .setPositiveButton("Cancel", null).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -297,7 +297,7 @@ public class BlueToothFindOthersAty extends Activity {
 
 
             isQuering = true;
-            Toast.makeText(BlueToothFindOthersAty.this, "开始扫描", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BlueToothFindOthersAty.this, "Scanning", Toast.LENGTH_SHORT).show();
             //清空列表
             deviceNameAndDresss.clear();
             //获得已配对的蓝牙设备

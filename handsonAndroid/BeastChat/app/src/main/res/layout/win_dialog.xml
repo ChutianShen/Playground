@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/windialog_tv"
-        android:text="你赢辣"
+        android:text="You Win!"
         android:textSize="28sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="你的大名："
+            android:text="Your name："
             android:textSize="15sp"
             android:gravity="center"
 
@@ -56,7 +56,7 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/windialog_submit"
-            android:text="提交"
+            android:text="Upload"
             android:textSize="15sp"
             android:layout_margin="5dp"
             android:layout_width="0dp"
@@ -65,7 +65,7 @@
             android:layout_weight="1"/>
         <Button
             android:id="@+id/windialog_cancle"
-            android:text="取消"
+            android:text="Cancel"
             android:layout_margin="5dp"
             android:textSize="15sp"
             android:layout_width="0dp"

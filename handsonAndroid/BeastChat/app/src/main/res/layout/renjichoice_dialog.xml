@@ -8,7 +8,7 @@
     <!-- Line 1 -->
 
     <TextView
-        android:text="难度选择"
+        android:text="Difficulty"
         android:textSize="28sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -34,7 +34,7 @@
         android:orientation="vertical">
         <Button
             android:id="@+id/renjichoice_jiandan"
-            android:text="简单模式电脑"
+            android:text="Easy"
             android:textSize="25sp"
             android:layout_margin="5dp"
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_weight="1"/>
         <Button
             android:id="@+id/renjichoice_kunnan"
-            android:text="普通模式电脑"
+            android:text="Difficult"
             android:layout_margin="5dp"
             android:textSize="25sp"
             android:layout_width="match_parent"

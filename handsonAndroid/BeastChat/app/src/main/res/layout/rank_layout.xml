@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <TextView
-        android:text="排   行   榜"
+        android:text="Ranking"
         android:gravity="center"
         android:textSize="35sp"
         android:textStyle="bold"

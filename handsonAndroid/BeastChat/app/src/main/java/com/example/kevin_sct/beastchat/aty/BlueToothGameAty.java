@@ -151,7 +151,7 @@ public class BlueToothGameAty extends Activity implements BlueToothGoBangView.Bl
     public void showdialog() {
         //收到挑战
         mydialog = new AlertDialog.Builder(BlueToothGameAty.this);
-        mydialog.setMessage("收到新的挑战，是否接受？")
+        mydialog.setMessage("New Challenge, ACCEPT？")
                 .setCancelable(false)
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

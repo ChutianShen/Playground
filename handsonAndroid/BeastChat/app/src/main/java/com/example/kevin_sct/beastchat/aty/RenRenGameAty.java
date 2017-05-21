@@ -40,7 +40,7 @@ public class RenRenGameAty extends Activity {
         renren_shuaxin = (Button) findViewById(R.id.renren_btn2);
         SimpleDateFormat simpleDateFormat = null;
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-        renren_textView.setText("当前时间：" + simpleDateFormat.format(new Date()));
+        renren_textView.setText("Current time：" + simpleDateFormat.format(new Date()));
         gbv.setTextView(renren_textView);
         gbv.setButtons(renren_huiqi, renren_shuaxin);
         gbv.setShowTimeTextViewTime(jishitime);

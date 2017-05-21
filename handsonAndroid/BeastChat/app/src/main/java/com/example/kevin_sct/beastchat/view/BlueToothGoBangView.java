@@ -52,9 +52,9 @@ public class BlueToothGoBangView extends View {
     private final Paint mPaint = new Paint();
 
     CharSequence mText;
-    CharSequence STRING_WIN = "白棋赢啦!  ";
-    CharSequence STRING_LOSE = "黑棋赢啦!  ";
-    CharSequence STRING_EQUAL = "和棋！  ";
+    CharSequence STRING_WIN = "White WINS!  ";
+    CharSequence STRING_LOSE = "Black WINS!  ";
+    CharSequence STRING_EQUAL = "Tie！  ";
 
     public BlueToothGoBangView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -242,7 +242,7 @@ public class BlueToothGoBangView extends View {
         }
         if ((command.equals("HUIQI"))) {
             if (storageArray.size()==0) {
-                Toast.makeText(getContext(),"开局并不能悔棋",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Sorry, You cannot do this yet",Toast.LENGTH_SHORT).show();
             }else {
                 if (storageArray.size()==1) {
                     storageArray.pop();
@@ -268,12 +268,12 @@ public class BlueToothGoBangView extends View {
                 showtime[i] = 0;
             }
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-            mStatusTextView.setText("蓝牙对战模式 当前时间：" + simpleDateFormat.format(new Date()));
+            mStatusTextView.setText("Bluetooth Mode! Current time：" + simpleDateFormat.format(new Date()));
         }
         else if ((command.equals("WHITE"))) {
-            mStatusTextView.setText("白棋赢辣");
+            mStatusTextView.setText("White WINs");
         } else if (command.equals("BLACK")) {
-            mStatusTextView.setText("黑棋赢辣");
+            mStatusTextView.setText("Black WINs");
         } else {
             Log.d("whalea", "收到的指令:" + command);
             String[] temps = command.split(":");
@@ -367,7 +367,7 @@ public class BlueToothGoBangView extends View {
                 case R.id.bluetooth_btn1:
                     blueToothGameAty.onBtnPress(0);
                     if (storageArray.size()==0) {
-                        Toast.makeText(getContext(),"开局并不能悔棋",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Sorry, you cannot do this yet.",Toast.LENGTH_SHORT).show();
                     }else {
                         if (storageArray.size()==1) {
                             storageArray.pop();
@@ -395,7 +395,7 @@ public class BlueToothGoBangView extends View {
                         showtime[i] = 0;
                     }
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-                    mStatusTextView.setText("蓝牙对战模式 当前时间：" + simpleDateFormat.format(new Date()));
+                    mStatusTextView.setText("Bluetooth mode! Current time：" + simpleDateFormat.format(new Date()));
                     break;
             }
         }

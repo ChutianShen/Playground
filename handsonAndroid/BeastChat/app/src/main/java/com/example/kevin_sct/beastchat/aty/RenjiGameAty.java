@@ -55,7 +55,7 @@ public class RenjiGameAty extends Activity implements RenjiGobangView.OnWinListe
         shuaxin = (Button) findViewById(R.id.btn2);
         SimpleDateFormat simpleDateFormat = null;
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-        textView.setText("当前时间：" + simpleDateFormat.format(new Date()));
+        textView.setText("Current time：" + simpleDateFormat.format(new Date()));
 
         gbv.setTextView(textView);
         gbv.setButtons(huiqi, shuaxin);
@@ -88,7 +88,7 @@ public class RenjiGameAty extends Activity implements RenjiGobangView.OnWinListe
 
 
             TextView showview = (TextView) mydialog.getWindow().findViewById(R.id.windialog_tv);
-            showview.setText("你赢辣~！");
+            showview.setText("You win~！");
             mydialog.getWindow()
                     .findViewById(R.id.windialog_submit)
                     .setOnClickListener(new View.OnClickListener() {
@@ -100,7 +100,7 @@ public class RenjiGameAty extends Activity implements RenjiGobangView.OnWinListe
                             boolean result = dbUtils.insertTime(totaltime, editText.getText().toString()); //插入时间和名字
                             if (result == true) {
                                 mydialog.dismiss();
-                                Toast.makeText(RenjiGameAty.this,"插入成功！",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RenjiGameAty.this,"Upload Successfully！",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

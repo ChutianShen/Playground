@@ -27,7 +27,7 @@ public class RankAty extends Activity {
         ArrayList<String[]> arrayList =  dbUtils.queryRank();
         ArrayList<String> data = new ArrayList<>();
         for (int i = 0;i<arrayList.size();i++) {
-            String temp = "第" + (i+1) + "名" +  "玩家名：" + arrayList.get(i)[0] + "    花费时间：" +arrayList.get(i)[1] + "秒";
+            String temp = "Good! " + (i+1) + "th" +  "Name：" + arrayList.get(i)[0] + "    Time：" +arrayList.get(i)[1] + "s";
             data.add(temp);
         }
 

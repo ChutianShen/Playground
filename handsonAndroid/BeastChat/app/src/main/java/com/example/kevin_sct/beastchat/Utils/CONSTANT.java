@@ -9,8 +9,8 @@ import java.util.HashMap;
  */
 
 public class CONSTANT {
-    public static final String IP_LOCAL_HOST = "http://169.231.23.58:4000";
-    //public static final String IP_LOCAL_HOST = "https://playgroundserver.herokuapp.com";
+    //public static final String IP_LOCAL_HOST = "http://169.231.23.58:4000";
+    public static final String IP_LOCAL_HOST = "https://playgroundserver.herokuapp.com";
 
     public static final String USER_INFO_PREFERENCE = "USER_INFO_PREFERENCE";
     public static final String USER_EMAIL = "USER_EMAIL";
