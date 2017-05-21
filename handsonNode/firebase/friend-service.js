@@ -14,11 +14,37 @@ var userFriendRequests = (io) =>{
     console.log(`Client ${socket.id} has connected to friend service!`);
 
     sendMessage(socket, io);
+    sendMove(socket, io);
     approveOrDeclineFrienqRequest(socket,io);
+    approveOrDeclineGameRequest(socket,io);
     sendOrDeleteFriendRequest(socket, io);
+    sendOrDeleteGameRequest(socket, io);
     detectDisconnection(socket, io);
 	});
 };
+
+function sendMove(socket, io){
+  socket.on('movedetails', (data) => {
+    var db = admin.database();
+    var friendMoveRef = db.ref('userMove').child(encodeEmail(data.gameFriendEmail))
+    .child(encodeEmail(data.moveSenderEmail)).push();
+
+    console.log(data.moveSenderEmail + ": " + data.moveText);
+
+    var newfriendMoveRef = db.ref('newUserMoves').child(encodeEmail(data.gameFriendEmail))
+    .child(friendMoveRef.key).push();
+
+    var move={
+      moveId: friendMoveRef.key,
+      moveText: data.moveText,
+      moveSenderEmail: data.moveSenderEmail
+    };
+
+    friendMoveRef.set(move);
+    newfriendMoveRef.set(move);
+
+  });
+}
 
 function sendMessage(socket, io){
   socket.on('details', (data) => {
@@ -62,6 +88,8 @@ function approveOrDeclineFrienqRequest(socket,io){
         .child(encodeEmail(data.userEmail));
         friendRequestRef.remove();
 
+        console.log("Friend Answer Code: " + data.requestCode);
+
         if (data.requestCode ==0) {
           var db = admin.database();
           var ref = db.ref('users');
@@ -73,6 +101,38 @@ function approveOrDeclineFrienqRequest(socket,io){
 
           userRef.once('value',(snapshot)=>{
             friendFriendRef.set({
+              email:snapshot.val().email,
+              userName:snapshot.val().userName,
+              userPicture:snapshot.val().userPicture,
+              dateJoined:snapshot.val().dateJoined,
+              hasLoggedIn:snapshot.val().hasLoggedIn
+            });
+          });
+        }
+  });
+}
+
+function approveOrDeclineGameRequest(socket,io){
+
+  socket.on('gameRequestResponse', (data) => {
+    var db = admin.database();
+    var gameRequestRef = db.ref('gameRequestsSent').child(encodeEmail(data.friendEmail))
+        .child(encodeEmail(data.userEmail));
+        gameRequestRef.remove();
+
+        console.log("Game Answer Code: " + data.requestCode);
+
+        if (data.requestCode ==0) {
+          var db = admin.database();
+          var ref = db.ref('users');
+          var userRef = ref.child(encodeEmail(data.userEmail));
+
+          var userGameFriendsRef = db.ref('userGameFriends');
+          var friendGameFriendRef = userGameFriendsRef.child(encodeEmail(data.friendEmail))
+          .child(encodeEmail(data.userEmail));
+
+          userRef.once('value',(snapshot)=>{
+            friendGameFriendRef.set({
               email:snapshot.val().email,
               userName:snapshot.val().userName,
               userPicture:snapshot.val().userPicture,
@@ -112,10 +172,11 @@ function sendOrDeleteFriendRequest(socket, io){
         });
       });
 
+
       var tokenRef = db.ref('userToken');
       var friendToken = tokenRef.child(encodeEmail(friendEmail));
 
-      friendToken.once("value", (snapshot) => {
+      friendToken.once('value', (snapshot) => {
         var message = {
           to : snapshot.val().token,    //send to the guy who has this tokenRef
 
@@ -131,12 +192,71 @@ function sendOrDeleteFriendRequest(socket, io){
           console.log(err);
         });
       });
+
     } else {
       friendRef.remove();
     }
   });
 }
 
+
+
+function sendOrDeleteGameRequest(socket, io){
+  socket.on('gameRequest', (data) => {
+    var friendEmail = data.friendEmail;
+    var userEmail = data.userEmail;
+    var requestCode = data.requestCode;
+
+    var db = admin.database();
+    var gameRef = db.ref('gameRequestReceieved').child(encodeEmail(friendEmail))
+    .child(encodeEmail(userEmail));
+
+    console.log("Game invitation requestCode: " + requestCode); //for debugging
+
+
+    if(requestCode == 0){
+      var db = admin.database();
+      var ref = db.ref('users');
+      var userRef = ref.child(encodeEmail(data.userEmail));
+
+      userRef.once('value', (snapshot) => {
+        gameRef.set({
+          email:snapshot.val().email,
+          userName:snapshot.val().userName,
+          userPicture:snapshot.val().userPicture,
+          dateJoined:snapshot.val().dateJoined,
+          hasLoggedIn:snapshot.val().hasLoggedIn
+        });
+      });
+
+
+      var tokenRef = db.ref('userToken');
+      var friendToken = tokenRef.child(encodeEmail(friendEmail));
+
+      friendToken.once("value", (snapshot) => {
+        console.log("Game Notification is working! ");
+        var message = {
+          to : snapshot.val().token,    //send to the guy who has this tokenRef
+
+          data : {
+            title : 'Beast Chat',
+            body : `Game Request from ${userEmail}`
+          },
+        };
+        fcm.send(message)
+        .then((response) => {
+          console.log('Message sent!');
+        }).catch((err) => {
+          console.log(err);
+        });
+      });
+
+    } else {
+      gameRef.remove();
+    }
+
+  });
+}
 
 function detectDisconnection(socket,io){
       socket.on('disconnect',()=>{
