@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +72,8 @@ public class FriendRequestFragment extends BaseFragment {
     private String mUserEmailString;
 
     private Socket mSocket;
+
+    ArrayList<String> mGameFriendDetails = new ArrayList<>();
 
     public static FriendRequestFragment newInstance(){
         return new FriendRequestFragment();
@@ -127,9 +130,21 @@ public class FriendRequestFragment extends BaseFragment {
                     userFriendGameReference.setValue(user);
                     mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
+
                     mCompositeSubscription.add(mLiveFriendServices.approveDeclineGameRequest(mSocket, mUserEmailString, user.getEmail(), "0"));
-                    startActivity(new Intent(getActivity(), RSPActivity.class));
+
+                    //ArrayList<String> gameFriendDetails = new ArrayList<>();
+                    mGameFriendDetails.add(user.getEmail());
+                    mGameFriendDetails.add(user.getUserName());
+                    Intent intent = RSPActivity.newInstance(getActivity(), mGameFriendDetails);
+                    //Toast.makeText(getActivity(), mGameFriendDetails.get(0), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), mGameFriendDetails.get(1), Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+                    //startActivity(new Intent(getActivity(), RSPActivity.class));
                     Toast.makeText(getActivity(), "Accept the request", Toast.LENGTH_SHORT).show();
+
                 }  else {
                     mGetAllUsersGameRequestReference.child(CONSTANT.encodeEmail(user.getEmail()))
                             .removeValue();
@@ -159,8 +174,9 @@ public class FriendRequestFragment extends BaseFragment {
         mGetAllCurrenUsersGameFriendsReference = FirebaseDatabase.getInstance().getReference()
                 .child(CONSTANT.FIRE_BASE_PATH_USER_GAME_FRIENDS).child(CONSTANT.encodeEmail(mUserEmailString));
 
-        Intent intent = new Intent(getActivity(), RSPActivity.class);
-        mGetAllCurrentUsersGameFriendsListener = mLiveFriendServices.getAllGameFriends(intent, getActivity());
+
+        //Intent intent = RSPActivity.newInstance(getActivity(), mGameFriendDetails);
+        mGetAllCurrentUsersGameFriendsListener = mLiveFriendServices.getAllGameFriends(getActivity());
 
         mGetAllCurrenUsersGameFriendsReference.addValueEventListener(mGetAllCurrentUsersGameFriendsListener);
 

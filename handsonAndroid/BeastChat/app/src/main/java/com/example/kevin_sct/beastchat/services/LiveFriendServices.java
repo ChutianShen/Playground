@@ -10,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kevin_sct.beastchat.Utils.CONSTANT;
+import com.example.kevin_sct.beastchat.activities.RSPActivity;
 import com.example.kevin_sct.beastchat.entites.ChatRoom;
 import com.example.kevin_sct.beastchat.entites.Message;
+import com.example.kevin_sct.beastchat.entites.Move;
 import com.example.kevin_sct.beastchat.entites.User;
 import com.example.kevin_sct.beastchat.fragments.FindFriendFragment;
 import com.example.kevin_sct.beastchat.views.ChatRoomViews.ChatRoomViewAdapter;
@@ -93,6 +95,7 @@ public class LiveFriendServices {
         };
     }
 
+    /*
     public ValueEventListener getAllGameFriends(final Intent intent, final Activity activityNow){
         final List<User> users = new ArrayList<>();
         return new ValueEventListener() {
@@ -104,6 +107,34 @@ public class LiveFriendServices {
                     users.add(user);
                 }
                 if(!users.isEmpty()) {
+                    activityNow.startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+    */
+
+    public ValueEventListener getAllGameFriends(final Activity activityNow){
+        final List<User> users = new ArrayList<>();
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
+                for (DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    User user =snapshot.getValue(User.class);
+                    users.add(user);
+                }
+                if(!users.isEmpty()) {
+                    ArrayList<String> gameFriendDetails = new ArrayList<>();
+                    gameFriendDetails.add(users.get(0).getEmail());
+                    gameFriendDetails.add(users.get(0).getUserName());
+                    Intent intent = RSPActivity.newInstance(activityNow, gameFriendDetails);
                     activityNow.startActivity(intent);
                 }
 
@@ -480,7 +511,38 @@ public class LiveFriendServices {
         };
     }
 
+    public ValueEventListener getAllMoves(final String userEmail, final String gameFriendEmailString){
+        final List<Move> moves = new ArrayList<>();
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                moves.clear();
+                DatabaseReference myMovesReference = FirebaseDatabase.getInstance().getReference()
+                        .child(CONSTANT.FIRE_BASE_PATH_USER_MOVE).child(CONSTANT.encodeEmail(userEmail));
+                DatabaseReference friengMovesReference = FirebaseDatabase.getInstance().getReference()
+                        .child(CONSTANT.FIRE_BASE_PATH_USER_MOVE).child(CONSTANT.encodeEmail(gameFriendEmailString));
 
+                DatabaseReference newMovesReference = FirebaseDatabase.getInstance().getReference()
+                        .child(CONSTANT.FIRE_BASE_PATH_USER_NEW_MOVE).child(CONSTANT.encodeEmail(userEmail));
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Move move = snapshot.getValue(Move.class);
+                    newMovesReference.child(move.getMoveId()).removeValue();
+                    moves.add(move);
+                }
+                Log.i("moves", "How many moves: " + moves.size());
+                if (!moves.isEmpty()){
+                    if(moves.size()/2 == 0) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
 
     public Subscription sendMessage(final Socket socket, String messageSenderEmail, String messageSenderPicture, String messageText
                     , String friendEmail, String messageSenderName){
@@ -506,6 +568,53 @@ public class LiveFriendServices {
                             sendData.put("friendEmail",strings.get(3));
                             sendData.put("senderName",strings.get(4));
                             socket.emit("details",sendData);
+                            return SERVER_SUCCESS;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            return SERVER_FAILURE;
+                        }
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+                });
+    }
+
+    public Subscription sendMove(final Socket socket, String moveSenderEmail, String moveText
+            , String gameFriendEmail, String moveSenderName){
+        List<String> details = new ArrayList<>();
+        details.add(moveSenderEmail);
+        details.add(moveText);
+        details.add(gameFriendEmail);
+        details.add(moveSenderName);
+        Observable<List<String>> listObservable = Observable.just(details);
+
+        return  listObservable
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<List<String>, Integer>() {
+                    @Override
+                    public Integer call(List<String> strings) {
+                        JSONObject sendData = new JSONObject();
+
+                        try {
+                            sendData.put("moveSenderEmail",strings.get(0));
+                            sendData.put("moveText",strings.get(1));
+                            sendData.put("gameFriendEmail",strings.get(2));
+                            sendData.put("moveSenderName",strings.get(3));
+                            socket.emit("movedetails",sendData);
                             return SERVER_SUCCESS;
                         } catch (JSONException e) {
                             e.printStackTrace();

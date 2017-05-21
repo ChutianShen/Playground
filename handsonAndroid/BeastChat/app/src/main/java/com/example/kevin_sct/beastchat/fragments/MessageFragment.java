@@ -141,7 +141,8 @@ public class MessageFragment extends BaseFragment {
         mUserChatRoomListener = getCurrentChatRoomListener();
         mUserChatRoomReference.addValueEventListener(mUserChatRoomListener);
 
-        mGetAllMessageReference = FirebaseDatabase.getInstance().getReference().child(CONSTANT.FIRE_BASE_PATH_USER_MESSAGES)
+        mGetAllMessageReference = FirebaseDatabase.getInstance().getReference()
+                .child(CONSTANT.FIRE_BASE_PATH_USER_MESSAGES)
                 .child(CONSTANT.encodeEmail(mUserEmailString))
                 .child(CONSTANT.encodeEmail(mFriendEmailString));
 
@@ -283,7 +284,7 @@ public class MessageFragment extends BaseFragment {
             mGetAllMessageReference.removeEventListener(mGetAllMessageListener);
         }
 
-        if(mUserChatRoomReference != null){
+        if(mUserChatRoomListener != null){
             mUserChatRoomReference.removeEventListener(mUserChatRoomListener);
         }
     }

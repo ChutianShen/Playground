@@ -30,6 +30,9 @@ public class CONSTANT {
     public static final String FIRE_BASE_PATH_USER_MESSAGES = "userMessages";
     public static final String FIRE_BASE_PATH_USER_NEW_MESSAGES = "newUserMessages";
 
+    public static final String FIRE_BASE_PATH_USER_MOVE= "userMove";
+    public static final String FIRE_BASE_PATH_USER_NEW_MOVE = "newUserMove";
+
     public static final String FIRE_BASE_PATH_USER_CHAT_ROOMS = "userChatRooms";
 
     public static String encodeEmail(String email){
