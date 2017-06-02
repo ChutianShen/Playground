@@ -70,7 +70,7 @@ public class DeviceshowAdapter extends BaseAdapter {
         device_ifchoise = (TextView) v.findViewById(R.id.device_ifchoise);
         if (device.getBundlestate() == BluetoothDevice.BOND_BONDED) {
             device_ifchoiseimg.setImageResource(R.drawable.ic_check_24dp);
-            device_ifchoise.setText("已配对");
+            device_ifchoise.setText("Mathed!");
         }
         return v;
     }
