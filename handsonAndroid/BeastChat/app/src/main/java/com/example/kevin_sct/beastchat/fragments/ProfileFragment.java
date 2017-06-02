@@ -21,7 +21,6 @@ import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.Utils.MarshMellowPermisson;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
 import com.example.kevin_sct.beastchat.activities.GameActivity;
-import com.example.kevin_sct.beastchat.activities.RSPActivity;
 import com.example.kevin_sct.beastchat.aty.InitAty;
 import com.example.kevin_sct.beastchat.services.LiveAccountServices;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
@@ -179,14 +178,14 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.goBang)
     public void enterGoBnag(){
-        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
         startActivity(new Intent(getActivity(), InitAty.class));
     }
 
     @OnClick(R.id.enterConnect3)
     public void setmEnterConnect3(){
 
-        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
 
         startActivity(new Intent(getActivity(), GameActivity.class));
         //fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.container_all);
@@ -197,12 +196,14 @@ public class ProfileFragment extends BaseFragment {
         */
     }
 
+    /*
     @OnClick(R.id.dual)
     public void dual(){
-        Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
 
         startActivity(new Intent(getActivity(), RSPActivity.class));
     }
+    */
 
     @OnClick(R.id.fragment_profile_camera_Picture)
     public void setmCameraImage(){
