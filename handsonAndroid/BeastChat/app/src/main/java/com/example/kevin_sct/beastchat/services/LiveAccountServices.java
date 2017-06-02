@@ -109,11 +109,12 @@ public class LiveAccountServices {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 JSONObject sendData = new JSONObject();
                                 try {
+                                    @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     sendData.put("email", currentUserEmail);
-                                    sendData.put("picUrl", taskSnapshot.getDownloadUrl().toString());
+                                    sendData.put("picUrl", downloadUrl.toString());
                                     socket.emit("userUpdatedPicture", sendData);
-                                    sharedPreferences.edit().putString(CONSTANT.USER_PICTURE,taskSnapshot.getDownloadUrl().toString()).apply();
-                                    Picasso.with(activity).load(taskSnapshot.getDownloadUrl().toString())
+                                    sharedPreferences.edit().putString(CONSTANT.USER_PICTURE,downloadUrl.toString()).apply();
+                                    Picasso.with(activity).load(downloadUrl.toString())
                                             .into(imageView);
                                 } catch (JSONException e) {
                                     e.printStackTrace();

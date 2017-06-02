@@ -2,6 +2,7 @@ package com.example.kevin_sct.beastchat.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -161,20 +162,6 @@ public class ProfileFragment extends BaseFragment {
         return rootView;
     }
 
-    @OnClick(R.id.fragment_profile_image_Picture)
-    public void setmImageView(){
-        if (!mMarshMellowPermission.checkPermissionForWriteExternalStorage()){
-            mMarshMellowPermission.requestPermissionForWriteExternalStorage();
-        } else if(!mMarshMellowPermission.checkPermissionForReadExternalStorage()){
-            mMarshMellowPermission.requestPermissionForReadExternalStorage();
-        } else{
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/jpeg");
-            intent.putExtra(Intent.EXTRA_LOCAL_ONLY,true);
-            startActivityForResult(Intent.createChooser(intent,"Choose Image With"),
-                    REQUEST_CODE_PICTURE);
-        }
-    }
 
     @OnClick(R.id.goBang)
     public void enterGoBnag(){
@@ -205,6 +192,15 @@ public class ProfileFragment extends BaseFragment {
     }
     */
 
+    @OnClick(R.id.fragment_profile_signOut)
+    public void setmSignOutButton(){
+        mSharedPreferences.edit().putString(CONSTANT.USER_PICTURE,"").apply();
+        mSharedPreferences.edit().putString(CONSTANT.USER_NAME,"").apply();
+        mSharedPreferences.edit().putString(CONSTANT.USER_EMAIL,"").apply();
+        FirebaseAuth.getInstance().signOut();
+        getActivity().finish();
+    }
+
     @OnClick(R.id.fragment_profile_camera_Picture)
     public void setmCameraImage(){
         if (!mMarshMellowPermission.checkPermissionForCamera()){
@@ -216,23 +212,23 @@ public class ProfileFragment extends BaseFragment {
         } else{
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             mTempUri = Uri.fromFile(getOutputFile());
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,mTempUri);
+
+            if(mTempUri == null){
+                //Toast.makeText(getActivity(), "Uri is null", Toast.LENGTH_SHORT).show();
+                Log.i("uri", "Button mTempUri is null");
+            } else {
+                Log.i("uri", "mTempUri: " + mTempUri.toString());
+            }
+            //String targetUri = Uri.fromFile(getOutputFile()).toString();
+            //intent.putExtra("uri", targetUri);
+            //intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,mTempUri);
             startActivityForResult(intent,REQUEST_CODE_CAMERA);
         }
     }
 
-    @OnClick(R.id.fragment_profile_signOut)
-    public void setmSignOutButton(){
-        mSharedPreferences.edit().putString(CONSTANT.USER_PICTURE,"").apply();
-        mSharedPreferences.edit().putString(CONSTANT.USER_NAME,"").apply();
-        mSharedPreferences.edit().putString(CONSTANT.USER_EMAIL,"").apply();
-        FirebaseAuth.getInstance().signOut();
-        getActivity().finish();
-    }
-
     private static File getOutputFile(){
         File mesdiaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES),"BeastChat");
+                Environment.DIRECTORY_PICTURES),"Playground");
 
         if (!mesdiaStorageDir.exists()){
             if (!mesdiaStorageDir.mkdir()){
@@ -242,6 +238,21 @@ public class ProfileFragment extends BaseFragment {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return new File(mesdiaStorageDir.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
+    }
+
+    @OnClick(R.id.fragment_profile_image_Picture)
+    public void setmImageView(){
+        if (!mMarshMellowPermission.checkPermissionForWriteExternalStorage()){
+            mMarshMellowPermission.requestPermissionForWriteExternalStorage();
+        } else if(!mMarshMellowPermission.checkPermissionForReadExternalStorage()){
+            mMarshMellowPermission.requestPermissionForReadExternalStorage();
+        } else{
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/jpeg");
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY,true);
+            startActivityForResult(Intent.createChooser(intent,"Choose Image With"),
+                    REQUEST_CODE_PICTURE);
+        }
     }
 
     @Override
@@ -259,7 +270,29 @@ public class ProfileFragment extends BaseFragment {
         }
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA){
-            Uri selectedImageUri = mTempUri;
+            //Uri selectedImageUri = mTempUri;
+
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), photo, "profile", null);
+            Uri selectedImageUri = Uri.parse(path);
+
+            /*
+            if(data.getData() == null){
+                Log.i("uri", "Data is null");
+            } else {
+                Log.i("uri", "data uri: " + data.getData().toString());
+            }
+            */
+            if(mTempUri == null){
+                //Toast.makeText(getActivity(), "Uri is null", Toast.LENGTH_SHORT).show();
+                Log.i("uri", "Result mTempUri is null");
+            }
+
+            if(selectedImageUri == null){
+                //Toast.makeText(getActivity(), "Uri is null", Toast.LENGTH_SHORT).show();
+                Log.i("uri", "null");
+            }
 
 
             StorageReference storageReference = FirebaseStorage.getInstance().getReference()
