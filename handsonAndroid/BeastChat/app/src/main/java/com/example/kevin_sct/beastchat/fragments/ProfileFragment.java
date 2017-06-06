@@ -25,6 +25,7 @@ import com.example.kevin_sct.beastchat.Utils.CONSTANT;
 import com.example.kevin_sct.beastchat.Utils.MarshMellowPermisson;
 import com.example.kevin_sct.beastchat.activities.BaseFragmentActivity;
 import com.example.kevin_sct.beastchat.activities.GameActivity;
+import com.example.kevin_sct.beastchat.activities.Maze.MazeActivity;
 import com.example.kevin_sct.beastchat.aty.InitAty;
 import com.example.kevin_sct.beastchat.services.LiveAccountServices;
 import com.example.kevin_sct.beastchat.services.LiveFriendServices;
@@ -430,7 +431,7 @@ public class ProfileFragment extends BaseFragment {
                     startActivity(new Intent(getActivity(), InitAty.class));
                 } else if(id == R.id.listview_menu_item_maze){
                     Toast.makeText(getActivity(), "Play Maze" + mExpandedMenuPos, Toast.LENGTH_SHORT).show();
-
+                    startActivity(new Intent(getActivity(), MazeActivity.class));
                 } else if (id == R.id.listview_menu_item_menu_collapse) {
                     mExpandedMenuPos = -1;
                     notifyDataSetChanged();

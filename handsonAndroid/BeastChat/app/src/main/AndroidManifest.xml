@@ -70,6 +70,19 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.ProfileActivity"/>
 
+        <activity android:name=".activities.Maze.MazeActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.ProfileActivity"/>
+
+        <activity
+            android:name=".activities.Maze.MazeGame"
+            android:parentActivityName=".activities.Maze.MazeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.Maze.MazeActivity" />
+        </activity >
+
         <activity android:name=".activities.MessageActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.InboxActivity"/>

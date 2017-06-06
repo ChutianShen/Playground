@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="game_bg">#DDDDDD</color>
+    <color name="line">#000000</color>
+    <color name="position">#FF0000</color>
+
+    <color name="blue">#FF0099CC</color>
+    <color name="green">#FF669900</color>
+    <color name="red">#FFCC0000</color>
 </resources>

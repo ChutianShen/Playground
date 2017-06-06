@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BeastChat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="levelSelect">Select Maze</string>
+    <string name="finished_title">Congrats</string>
+    <string name="finished_text">Level Cleared</string>
+    <string name="finished_button">End Game</string>
+    <string name="next_level_button">Next Level</string>
 </resources>
