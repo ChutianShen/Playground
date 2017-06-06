@@ -103,6 +103,12 @@
 
         />
 
+    <ListView
+        android:id="@+id/listview_menu_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null" />
+
     <Button
         android:id="@+id/enterConnect3"
         android:layout_width="wrap_content"
@@ -111,7 +117,8 @@
         android:layout_marginBottom="19dp"
         android:layout_toLeftOf="@+id/fragment_profile_userPicture"
         android:layout_toStartOf="@+id/fragment_profile_userPicture"
-        android:text="Connect3" />
+        android:text="Connect3"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/goBang"
@@ -121,7 +128,8 @@
         android:layout_alignBottom="@+id/enterConnect3"
         android:layout_toEndOf="@+id/fragment_profile_userPicture"
         android:layout_toRightOf="@+id/fragment_profile_userPicture"
-        android:text="goBang" />
+        android:text="goBang"
+        android:visibility="gone"/>
 
 
 

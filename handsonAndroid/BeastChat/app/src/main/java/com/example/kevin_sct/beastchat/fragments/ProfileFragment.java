@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -81,11 +85,17 @@ public class ProfileFragment extends BaseFragment {
     @BindView(R.id.goBang)
     Button mgoBang;
 
+    @BindView(R.id.listview_menu_list)
+    ListView listView;
+
     //FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
 
     public static ProfileFragment newInstance(){
         return new ProfileFragment();
     }
+
+    private int mExpandedMenuPos = -1;
+    private ListViewAdapter mAdapter;
 
     private Unbinder mUnbinder;
 
@@ -134,6 +144,13 @@ public class ProfileFragment extends BaseFragment {
         mBottomBar.selectTabWithId(R.id.tab_profile);
         setUpBottomBar(mBottomBar, 3);
 
+        ArrayList<String> data = new ArrayList<String>();
+
+        data.add("Games");
+        listView.setAdapter(mAdapter = new ListViewAdapter(getContext(), data));
+        listView.setOnItemClickListener(new OnListItemClickListenser());
+
+
         Picasso.with(getActivity())
                 .load(mSharedPreferences.getString(CONSTANT.USER_PICTURE,""))
                 .into(mUserPicture);
@@ -165,7 +182,7 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.goBang)
     public void enterGoBnag(){
-        //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();\
         startActivity(new Intent(getActivity(), InitAty.class));
     }
 
@@ -173,7 +190,6 @@ public class ProfileFragment extends BaseFragment {
     public void setmEnterConnect3(){
 
         //Toast.makeText(getActivity(),"The button works",Toast.LENGTH_SHORT).show();
-
         startActivity(new Intent(getActivity(), GameActivity.class));
         //fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.container_all);
         /*
@@ -341,4 +357,90 @@ public class ProfileFragment extends BaseFragment {
         super.onDestroy();
         mSocket.disconnect();
     }
+
+    private class ListViewAdapter extends BaseAdapter {
+        private LayoutInflater mLayoutInflater;
+        private ArrayList<String> mListData;
+        private OnMenuClickListenser mOnMenuClickListenser = new OnMenuClickListenser();
+        private class ViewHolder {
+            public ViewHolder (View viewRoot) {
+                root = viewRoot;
+                txt = (TextView)viewRoot.findViewById(R.id.listview_menu_item_txt);
+                menu = viewRoot.findViewById(R.id.listview_menu_item_menu);
+                btnToast = (Button)viewRoot.findViewById(R.id.listview_menu_item_connect3);
+                gobang = (Button)viewRoot.findViewById(R.id.listview_menu_item_gobang);
+                btnCollapse = (Button)viewRoot.findViewById(R.id.listview_menu_item_menu_collapse);
+            }
+            public View root;
+            public TextView txt;
+            public View menu;
+            public Button btnToast;
+            public Button gobang;
+            public Button btnCollapse;
+        }
+        public ListViewAdapter(Context context, ArrayList<String> data) {
+            mLayoutInflater = LayoutInflater.from(context);
+            mListData = data;
+        }
+        @Override
+        public int getCount() {
+            return mListData == null ? 0 : mListData.size();
+        }
+        @Override
+        public Object getItem(int position) {
+            return mListData == null ? 0 : mListData.get(position);
+        }
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mLayoutInflater.inflate(R.layout.listview_menu_item, parent, false);
+                convertView.setTag(new ViewHolder(convertView));
+            }
+            if (convertView != null && convertView.getTag() instanceof ViewHolder) {
+                final ViewHolder holder = (ViewHolder)convertView.getTag();
+                holder.txt.setText(String.valueOf(getItem(position)));
+                holder.menu.setVisibility(position == mExpandedMenuPos ? View.VISIBLE : View.GONE);
+                holder.btnToast.setText("Connect3");
+                holder.gobang.setText("GoBang");
+                holder.btnCollapse.setText("Collapse");
+                holder.btnToast.setOnClickListener(mOnMenuClickListenser);
+                holder.gobang.setOnClickListener(mOnMenuClickListenser);
+                holder.btnCollapse.setOnClickListener(mOnMenuClickListenser);
+            }
+            return convertView;
+        }
+        private class OnMenuClickListenser implements View.OnClickListener {
+            @Override
+            public void onClick(View v) {
+                final int id = v.getId();
+                if (id == R.id.listview_menu_item_connect3) {
+                    Toast.makeText(getActivity(), "Play Connect3", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), GameActivity.class));
+                } else if(id == R.id.listview_menu_item_gobang){
+                    Toast.makeText(getActivity(), "Play GoBang" + mExpandedMenuPos, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), InitAty.class));
+                } else if (id == R.id.listview_menu_item_menu_collapse) {
+                    mExpandedMenuPos = -1;
+                    notifyDataSetChanged();
+                }
+            }
+        }
+    }
+    private class OnListItemClickListenser implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == mExpandedMenuPos) {
+                mExpandedMenuPos = -1;
+            } else {
+                mExpandedMenuPos = position;
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 }
+
+

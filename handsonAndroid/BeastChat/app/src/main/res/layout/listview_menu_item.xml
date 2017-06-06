@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/background_light"
+    android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants" >
+    <TextView
+        android:id="@+id/listview_menu_item_txt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:text="Games" />
+    <LinearLayout
+        android:id="@+id/listview_menu_item_menu"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/listview_menu_item_connect3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:text="Connect3" />
+
+        <Button
+            android:id="@+id/listview_menu_item_gobang"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:text="GoBang" />
+
+        <Button
+            android:id="@+id/listview_menu_item_menu_collapse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="15sp"
+            android:text="Collapse" />
+    </LinearLayout>
+</LinearLayout>
