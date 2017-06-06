@@ -88,6 +88,7 @@ public class ProfileFragment extends BaseFragment {
     @BindView(R.id.listview_menu_list)
     ListView listView;
 
+
     //FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
 
     public static ProfileFragment newInstance(){
@@ -95,7 +96,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private int mExpandedMenuPos = -1;
-    private ListViewAdapter mAdapter;
+    private ListAdapter mListAdapter;
 
     private Unbinder mUnbinder;
 
@@ -144,13 +145,6 @@ public class ProfileFragment extends BaseFragment {
         mBottomBar.selectTabWithId(R.id.tab_profile);
         setUpBottomBar(mBottomBar, 3);
 
-        ArrayList<String> data = new ArrayList<String>();
-
-        data.add("Games");
-        listView.setAdapter(mAdapter = new ListViewAdapter(getContext(), data));
-        listView.setOnItemClickListener(new OnListItemClickListenser());
-
-
         Picasso.with(getActivity())
                 .load(mSharedPreferences.getString(CONSTANT.USER_PICTURE,""))
                 .into(mUserPicture);
@@ -176,6 +170,13 @@ public class ProfileFragment extends BaseFragment {
         mUsersNewMessagesListener = mLiveFriendServices.getAllNewMessages(mBottomBar,R.id.tab_messages);
 
         mUsersNewMessagesReference.addValueEventListener(mUsersNewMessagesListener);
+
+        ArrayList<String> data = new ArrayList<String>();
+
+        data.add("Games");
+        listView.setAdapter(mListAdapter = new ListAdapter(getContext(), data));
+        listView.setOnItemClickListener(new OnListItemClickListenser());
+
         return rootView;
     }
 
@@ -358,7 +359,8 @@ public class ProfileFragment extends BaseFragment {
         mSocket.disconnect();
     }
 
-    private class ListViewAdapter extends BaseAdapter {
+
+    private class ListAdapter extends BaseAdapter {
         private LayoutInflater mLayoutInflater;
         private ArrayList<String> mListData;
         private OnMenuClickListenser mOnMenuClickListenser = new OnMenuClickListenser();
@@ -369,6 +371,7 @@ public class ProfileFragment extends BaseFragment {
                 menu = viewRoot.findViewById(R.id.listview_menu_item_menu);
                 btnToast = (Button)viewRoot.findViewById(R.id.listview_menu_item_connect3);
                 gobang = (Button)viewRoot.findViewById(R.id.listview_menu_item_gobang);
+                maze = (Button) viewRoot.findViewById(R.id.listview_menu_item_maze);
                 btnCollapse = (Button)viewRoot.findViewById(R.id.listview_menu_item_menu_collapse);
             }
             public View root;
@@ -376,9 +379,10 @@ public class ProfileFragment extends BaseFragment {
             public View menu;
             public Button btnToast;
             public Button gobang;
+            public Button maze;
             public Button btnCollapse;
         }
-        public ListViewAdapter(Context context, ArrayList<String> data) {
+        public ListAdapter(Context context, ArrayList<String> data) {
             mLayoutInflater = LayoutInflater.from(context);
             mListData = data;
         }
@@ -409,6 +413,7 @@ public class ProfileFragment extends BaseFragment {
                 holder.btnCollapse.setText("Collapse");
                 holder.btnToast.setOnClickListener(mOnMenuClickListenser);
                 holder.gobang.setOnClickListener(mOnMenuClickListenser);
+                holder.maze.setOnClickListener(mOnMenuClickListenser);
                 holder.btnCollapse.setOnClickListener(mOnMenuClickListenser);
             }
             return convertView;
@@ -423,6 +428,9 @@ public class ProfileFragment extends BaseFragment {
                 } else if(id == R.id.listview_menu_item_gobang){
                     Toast.makeText(getActivity(), "Play GoBang" + mExpandedMenuPos, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), InitAty.class));
+                } else if(id == R.id.listview_menu_item_maze){
+                    Toast.makeText(getActivity(), "Play Maze" + mExpandedMenuPos, Toast.LENGTH_SHORT).show();
+
                 } else if (id == R.id.listview_menu_item_menu_collapse) {
                     mExpandedMenuPos = -1;
                     notifyDataSetChanged();
@@ -438,9 +446,11 @@ public class ProfileFragment extends BaseFragment {
             } else {
                 mExpandedMenuPos = position;
             }
-            mAdapter.notifyDataSetChanged();
+            mListAdapter.notifyDataSetChanged();
         }
     }
+
+
 }
 
 
