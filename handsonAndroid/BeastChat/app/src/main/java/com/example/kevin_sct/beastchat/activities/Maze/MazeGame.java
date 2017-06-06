@@ -26,4 +26,11 @@ public class MazeGame extends AppCompatActivity {
         view.setMaze(maze);
         setContentView(view);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(MazeGame.this, MazeActivity.class);
+        startActivity(intent);
+    }
 }

@@ -10,7 +10,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +45,7 @@ public class MazeView extends View implements SensorEventListener {
     Sensor mAccelerometer;
     private float mSensorX;
     private float mSensorY;
-    private boolean lastDirection;
+    private int lastDirection;
     private static float ACCEL_THRESHOLD = 1;
 
 
@@ -158,14 +157,17 @@ public class MazeView extends View implements SensorEventListener {
                 }
             }
         });
-        if (mazeNumber != MazeCreator.NUM_MAZES) {
-            View nextLevelButton = view.findViewById(R.id.nextLevel);
+        View nextLevelButton = view.findViewById(R.id.nextLevel);
+        if (mazeNumber == MazeCreator.NUM_MAZES) {
+            nextLevelButton.setVisibility(INVISIBLE);
+        } else {
+            nextLevelButton = view.findViewById(R.id.nextLevel);
             nextLevelButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (v.getId() == R.id.nextLevel) {
                         finishDialog.dismiss();
-                        ((Activity)context).finish(); // need to exit the last activity first
+                        //((Activity)context).finish(); // need to exit the last activity first
                         Intent intent = new Intent(getContext(), MazeGame.class);
                         Maze maze = MazeCreator.getMaze(mazeNumber+1);
                         intent.putExtra("maze", maze);
@@ -177,6 +179,7 @@ public class MazeView extends View implements SensorEventListener {
         }
 
         finishDialog.show();
+        sensorManager.unregisterListener(this);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -265,29 +268,16 @@ public class MazeView extends View implements SensorEventListener {
             mSensorX = sensorEvent.values[0];
             mSensorY = sensorEvent.values[1];
 
-            Log.d("mSensorX: ", Float.toString(mSensorX));
-            Log.d("mSensorY: ", Float.toString(mSensorY));
+//            Log.d("mSensorX: ", Float.toString(mSensorX));
+//            Log.d("mSensorY: ", Float.toString(mSensorY));
 
             boolean moved = false;
 
             // if moving in same direction, need to tilt more
             //if (lastDirection)
 
-            if (Math.abs(mSensorX) > Math.abs(mSensorY)) {
-                if (mSensorX < -ACCEL_THRESHOLD) {
-                    moved = maze.move(Maze.RIGHT);
-                }
-                if (mSensorX > ACCEL_THRESHOLD) {
-                    moved = maze.move(Maze.LEFT);
-                }
-            } else {
-                if (mSensorY < -ACCEL_THRESHOLD) {
-                    moved = maze.move(Maze.UP);
-                }
-                if (mSensorY > ACCEL_THRESHOLD) {
-                    moved = maze.move(Maze.DOWN);
-                }
-            }
+            moved = maze.move(getDirection(mSensorX, mSensorY));
+
             if(moved) {
                 //the ball was moved so we'll redraw the view
                 invalidate();
